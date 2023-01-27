@@ -6,7 +6,7 @@
 #    By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/13 14:29:59 by yonshin           #+#    #+#              #
-#    Updated: 2023/01/16 22:07:03 by yonshin          ###   ########.fr        #
+#    Updated: 2023/01/27 22:30:06 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ OBJECTS = \
 	ft_lstmap.o \
 	get_next_line.o \
 	get_next_line_utils.o \
+	ft_malloc_guard.o \
 
 $(NAME): $(OBJECTS)
 	ar $(OPTIONS) $@ $^

@@ -6,7 +6,7 @@
 #    By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/25 20:46:00 by yonshin           #+#    #+#              #
-#    Updated: 2023/01/26 22:53:01 by yonshin          ###   ########.fr        #
+#    Updated: 2023/01/27 22:46:26 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,12 @@ INCLUDE = $(addprefix -I, $(dir $(LIB)))
 LIBDUP = $(notdir $(LIB))
 OBJS = \
 	minishell.o \
+	data.o \
+	execute.o \
+	expanding.o \
+	init_signal.o \
+	init_envp.o \
+	parse.o \
 
 ifdef WITH_BONUS
 	OBJS = $(BONUS_OBJS)

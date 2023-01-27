@@ -17,6 +17,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
+# include "tree.h"
 
 typedef enum e_token_type
 {
@@ -40,6 +41,7 @@ typedef struct s_ms
 	int		err;
 	t_list	*envp;
 	t_list	*unlink_lst;
+	t_list	*waitpid_lst;
 }	t_ms;
 
 typedef struct s_cmd
@@ -72,5 +74,12 @@ typedef struct s_token
 	t_token_type	type;
 	t_utoken		ud;
 }	t_token;
+
+void	init_signal(void);
+void	init_envp(char **envp);
+void	execute(t_tree *parsed_tree);
+char	**expanding(char *str);
+int		parse(char *line, t_tree **result);
+t_ms	*data();
 
 #endif

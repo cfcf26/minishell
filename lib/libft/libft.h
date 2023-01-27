@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 13:52:51 by yonshin           #+#    #+#             */
-/*   Updated: 2022/12/13 14:07:00 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/01/27 22:51:02 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ int		ft_tolower(int c);
 int		ft_toupper(int c);
 char	*get_next_line(int fd);
 char	*get_next_line_recursive(t_test **head, int fd, size_t start, int *err);
+void	*ft_malloc_guard(size_t size);
 
 #endif
