@@ -15,7 +15,7 @@ int main (int argc, char *argv[], char *envp[])
 		if (parse(line, &parsed) == 0)
 		{
 			execute(parsed);
-			free_list(parsed, NULL);
+			ft_lstclear(parsed, NULL);
 		}
 		free(line);
 	}
