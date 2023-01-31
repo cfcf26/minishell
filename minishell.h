@@ -1,5 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
+/*   Updated: 2023/02/01 15:09:43 by juykang          ###   ########seoul.kr  */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -78,11 +90,25 @@ typedef struct s_token
 	t_utoken		ud;
 }	t_token;
 
-void	init_signal(void);
-void	init_envp(char **envp);
-void	execute(t_list *parsed_list);
-t_list	*expanding(char *str);
-int		parse(char *line, t_list **result);
-t_ms	*data();
+typedef struct s_exp_node
+{
+	char		*str;
+	t_exp_node	*next;
+}	t_exp_node;
+
+typedef struct s_exp_data
+{
+	int					type;
+	int					len;
+	char				*str;
+	struct s_exp_data	*next;
+}	t_exp_data;
+
+void		init_signal(void);
+void		init_envp(char **envp);
+void		execute(t_list *parsed_list);
+t_list		*expanding(char *str);
+int			parse(char *line, t_list **result);
+t_ms		*data();
 
 #endif
