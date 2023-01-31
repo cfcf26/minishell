@@ -5,7 +5,7 @@
 /// @param line 쉘 명령어를 담은 문자열
 /// @param result 파싱 결과
 /// @return 파싱에 실패한 경우 0이 아닌 값을 리턴
-int		parse(char *line, t_tree **result)
+int		parse(char *line, t_list **result)
 {
 	*result = NULL;
 

@@ -77,9 +77,9 @@ typedef struct s_token
 
 void	init_signal(void);
 void	init_envp(char **envp);
-void	execute(t_tree *parsed_tree);
+void	execute(t_list *parsed_list);
 char	**expanding(char *str);
-int		parse(char *line, t_tree **result);
+int		parse(char *line, t_list **result);
 t_ms	*data();
 
 #endif
