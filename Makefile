@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/25 20:46:00 by yonshin           #+#    #+#              #
-#    Updated: 2023/01/27 22:46:26 by yonshin          ###   ########.fr        #
+#    Updated: 2023/01/31 18:44:06 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ else
 endif
 LIB = \
 	./lib/libft/libft.a \
-	./lib/libtree/libtree.a \
 
 INCLUDE = $(addprefix -I, $(dir $(LIB)))
 LIBDUP = $(notdir $(LIB))

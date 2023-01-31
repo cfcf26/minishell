@@ -12,5 +12,5 @@ static void exe(t_token *token)
 void execute(t_list *parsed_list)
 {
 	// TODO: yonshin
-	iterate_tree(parsed_list, exe, INORDER);
+	ft_lstiter(parsed_list, exe);
 }
