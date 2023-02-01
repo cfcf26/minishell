@@ -18,6 +18,9 @@
 # include <readline/history.h>
 # include "libft.h"
 
+# define PIPE_READ 0
+# define PIPE_WRITE 1
+
 typedef enum e_token_type
 {
 	NONE = 0,
@@ -38,6 +41,7 @@ typedef enum e_redir_type
 typedef struct s_ms
 {
 	int		err;
+	int		pipe_fd[2];
 	t_list	*envp;
 	t_list	*unlink_lst;
 	t_list	*waitpid_lst;
