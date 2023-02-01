@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/01 16:41:27 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/01 22:32:03 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,13 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
+<<<<<<< HEAD
 
 # define PIPE_READ 0
 # define PIPE_WRITE 1
+=======
+# include "tree.h"
+>>>>>>> 418c71a0bcb0832ec5e16d99cc85588408a1cd41
 
 typedef enum e_token_type
 {
