@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/01 15:09:43 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/01 16:41:27 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,12 @@ typedef struct s_exp_node
 
 typedef struct s_exp_data
 {
-	int					type;
 	int					len;
+	char				*value;
+	char				*key;
+	char				quote;
+	char				*cur;
 	char				*str;
-	struct s_exp_data	*next;
 }	t_exp_data;
 
 void		init_signal(void);

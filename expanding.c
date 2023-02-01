@@ -6,54 +6,48 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 22:35:16 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/01 15:08:45 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/01 20:52:07 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_array_size(char *str)
-{
-	while (*str)
-	{
-		if (*str == '$')
-		{
-			if(ft_strncmp(str, data()->envp, ))
-		}
-		else
-			str++;
-	}
-}
-
-void	check_expand_type(char *str)
+t_exp_data	*expand_variables(char *str)
 {
 	int			i;
-	int			len;
-	int			size;
-	t_exp_data	**data;
+	t_exp_data	*str_data;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\"')
-			expand_double_quote(str, i, &len, data);
-		else if (str[i] == '\'')
-			expand_single_quote(str, i, &len, data);
-		else if (str[i] == '$')
-			expand_envp(str, i, &len, data);
+		if (str[i] != '$')
+		{
+			str_data->len++;
+			i++;
+		}
 		else
-			expand_word(str, i, &len, data);
-		i + len;
+		{
+			str_data->key = find_key(str, i);
+			str_data->value = ft_lstncmp(str, str_data->key);
+			strs_join(str, i, str_data);
+			str_data->len = 0;
+			i + str_data->key;
+		}
 	}
+	if (str_data->len > 0)
+		strs_join(str, i, str_data);
+	return (str_data);
 }
 
 t_list	*expanding(char *str)
 {
-	t_ms		*ms;
-	t_exp_node	*res;
+	char		*expanded_str;
+	t_exp_node	*str_data;
+	t_list		*res;
 
-	ms = data();
-	res = ft_malloc(sizeof(t_exp_node *));
-	check_expand_type(str);
-	res->str = remove_quote(str);
+	res = ft_malloc(sizeof(t_list *));
+	str_data = expand_variables(*str);
+	split_exp_str(str_data->str, res);
+	remove_quote(res);
+	return (res);
 }

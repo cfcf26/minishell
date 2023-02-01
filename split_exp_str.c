@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_db_q.c                                      :+:      :+:    :+:   */
+/*   split_exp_str.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/01/31 21:08:18 by juykang          ###   ########seoul.kr  */
+/*   Created: 2023/02/01 19:55:27 by juykang           #+#    #+#             */
+/*   Updated: 2023/02/01 22:28:18 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_double_quote(char *str, int offset, int *len, t_exp_data *node)
+static int	split_str(char *str, t_list *res)
 {
-	char		*res;
-	int			i;
+	char	quote;
+	int		len;
 
-	i = 0;
-	data()->envp;
-	while (str[offset + i] != '\"')
+	len = 0;
+	while (str[len] && (quote || ft_strchr(" \t\n|&;()<>", str[len]) == 0))
 	{
-		if (str[i] == '$')
-		{
-			len = i + 1;
-			res = expand_in_double_env();
-		}
-		i++;
+		if (quote == 0 && (str[len] == '\'' || str[len] == '\"'))
+			quote = str[len];
+		else if (quote == '\'' && str[len] == '\'')
+			quote = 0;
+		else if (quote == '\"' && str[len] == '\"')
+			quote = 0;
+		len++;
 	}
+	res->content =
+}
+
+t_list	*split_exp_str(char *str)
+{
+	
 }
