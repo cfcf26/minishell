@@ -7,5 +7,6 @@ t_ms	*data()
 	if (ms != NULL)
 		return (ms);
 	ms = ft_malloc_guard(sizeof(t_ms));
+	ft_memset(ms, 0, sizeof(t_ms));
 	return (ms);
 }
