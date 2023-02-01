@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	**expanding(char *str)
+t_list	*expanding(char *str)
 {
 	// TODO: juykang
 
