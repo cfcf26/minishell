@@ -54,6 +54,7 @@ typedef struct s_ms
 {
 	int		err;
 	int		pipe_fd[2];
+	int		pipe_last_fd;
 	t_list	*envp;
 	t_list	*unlink_lst;
 	t_list	*waitpid_lst;

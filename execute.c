@@ -255,16 +255,31 @@ static void exe(t_list *lst)
 
 
 	// 실행
-	pipe(data()->pipe_fd);
+	if (pipe_lst != NULL)
+		pipe(data()->pipe_fd);
 	int	pid = fork();
 	if (pid == -1)
 		exit(1); // pid error
 	if (pid == 0)
 	{
+		if (data()->pipe_last_fd != -1)
+		{
+			dup2(data()->pipe_last_fd, STDIN_FILENO);
+			close(data()->pipe_last_fd);
+		}
+		if (pipe_lst != NULL)
+		{
+			close(data()->pipe_fd[PIPE_READ]);
+			dup2(data()->pipe_fd[PIPE_WRITE], STDOUT_FILENO);
+			close(data()->pipe_fd[PIPE_WRITE]);
+		}
 		redir(redir_lst);
 		execve(cmd->cmd, lst2arr(expandings), lst2arr(data()->envp));
 	}
-
+	if (data()->pipe_last_fd != -1)
+		close(data()->pipe_last_fd);
+	close(data()->pipe_fd[PIPE_WRITE]);
+	data()->pipe_last_fd = data()->pipe_fd[PIPE_READ];
 
 	// 정리
 	t_list	*node = ft_lstnew(intdup(pid));
@@ -304,10 +319,16 @@ void execute(t_list *parsed_list)
 {
 	t_list	*next;
 
+	data()->pipe_last_fd = -1;
 	while (next_cmd(&parsed_list, &next))
 	{
 		exe(next);
 		ft_lstclear(&next, NULL);
+	}
+	if (data()->pipe_last_fd != -1)
+	{
+		close(data()->pipe_last_fd);
+		data()->pipe_last_fd = -1;
 	}
 	t_list *waitpids = data()->waitpid_lst;
 	while (waitpids)
