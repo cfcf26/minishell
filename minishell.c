@@ -6,7 +6,7 @@
 /*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:33:22 by ekwak             #+#    #+#             */
-/*   Updated: 2023/01/31 18:22:15 by ekwak            ###   ########.fr       */
+/*   Updated: 2023/02/08 21:40:02 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*line;
 	t_list	*parsed;
 
+	if (argc == 0 || argv == 0 || envp == 0)
+		return (0);
 	ft_memset(data(), 0, sizeof(t_ms));
-	init_signal();
-	init_envp(envp);
+	//init_signal();
+	//init_envp(envp);
 	parsed = NULL;
 	while (1)
 	{

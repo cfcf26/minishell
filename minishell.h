@@ -6,13 +6,14 @@
 /*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 14:09:53 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/13 14:10:53 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "lib/libft/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -28,10 +29,12 @@
 # include <term.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "./lib/libft/libft.h"
 
 # define PIPE_READ 0
 # define PIPE_WRITE 1
+
+# define MALLOC_ERR 1
+# define SYNTAX_ERR 3
 
 typedef enum e_token_type
 {
@@ -125,6 +128,7 @@ char		*exception_dollor(char *str, t_exp_data *str_data);
 t_list		*split_exp_str(char *str, t_exp_data *str_data);
 void		remove_quote(t_list *exp_list, t_exp_data *str_data);
 t_list		*expanding(char *str);
+int			syntaxer(t_list **lst);
 
 typedef struct s_func
 {
