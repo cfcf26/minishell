@@ -151,7 +151,7 @@ void	lstprint(t_list *lst)
 	while (lst)
 	{
 		tmp = (t_token *)lst->content;
-		printf("type: %d, str: %s\n", tmp->type, tmp->ud.str);
+		printf("type: %d\n", tmp->type);
 		lst = lst->next;
 	}
 }

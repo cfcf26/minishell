@@ -40,9 +40,10 @@ typedef enum e_token_type
 {
 	NONE = 0,
 	REDIR,
-	PIPE,
 	CMD,
-	WORD
+	PIPE,
+	WORD,
+	VISITED
 }	t_token_type;
 
 typedef enum e_redir_type

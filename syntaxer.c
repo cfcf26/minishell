@@ -6,12 +6,87 @@
 /*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:07 by ekwak             #+#    #+#             */
-/*   Updated: 2023/02/02 17:02:36 by ekwak            ###   ########.fr       */
+/*   Updated: 2023/02/02 18:44:20 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lib/libft/libft.h"
+#include "lib/gnl/get_next_line.h"
+
+int ft_max(int x, int y)
+{
+    if (x > y)
+        return x;
+    else
+        return y;
+}
+
+
+char	*create_random_file(void)
+{
+	int			fd;
+	const char	material[62] = "abcdefghijklmnopqrxtuvwxyz\
+ABCDEFGHIJKLMNOPQRXTUVWXYZ0123456789";
+	char		*file_name;
+	char		*tmp_name;
+	char		tmp[2];
+
+	fd = open("/dev/urandom", O_RDONLY);
+	file_name = ft_strdup("/tmp/pipex_tmp");
+	tmp[1] = 0;
+	while (!access(file_name, F_OK))
+	{
+		if (ft_strlen(file_name) > 128)
+		{
+			free(file_name);
+			file_name = ft_strdup("/tmp/pipex_tmp");
+		}
+		read(fd, tmp, 1);
+		tmp[0] = material[(unsigned char)tmp[0] % 62];
+		tmp_name = ft_strjoin(file_name, tmp);
+		free(file_name);
+		file_name = tmp_name;
+	}
+	close(fd);
+	return (file_name);
+}
+
+void	fill_tmp_file(int fd, char *limit)
+{
+	char	*buff;
+
+	while (1)
+	{
+		write(1, "pipe heredoc> ", 15);
+		buff = get_next_line(0);
+		if (!buff)
+			break ;
+		if (ft_strncmp(buff, limit, ft_max(ft_strlen(buff) - 1, \
+		ft_strlen(limit))) == 0)
+			break ;
+		write(fd, buff, ft_strlen(buff));
+		free(buff);
+	}
+	free(buff);
+}
+
+char	*heredoc(char *limit)
+{
+	char	*file_name;
+	int		fd;
+
+	file_name = create_random_file();
+	fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
+		printf("infile error!");
+	fill_tmp_file(fd, limit);
+	close(fd);
+	if (data()->unlink_lst == NULL)
+		data()->unlink_lst = ft_lstnew(file_name);
+	else
+		ft_lstadd_back(&data()->unlink_lst, ft_lstnew(file_name));
+	return (file_name);
+}
 
 void	print_syntax(t_list **lst)
 {
@@ -121,6 +196,8 @@ t_list	*init_redir_lst(t_list **lst)
 			break ;
 		if (((t_token *)tmp->content)->type == REDIR)
 		{
+			((t_token *)tmp->content)->type = VISITED;
+			((t_token *)tmp->next->content)->type = VISITED;
 			if (redir_lst == NULL)
 			{
 				redir_lst = ft_lstnew(ft_calloc(1, sizeof(t_token)));
@@ -128,21 +205,21 @@ t_list	*init_redir_lst(t_list **lst)
 			}
 			else
 			{
-				redir_lst_tmp = redir_lst;
-				while (redir_lst_tmp->next)
-					redir_lst_tmp = redir_lst_tmp->next;
-				redir_lst_tmp->next = ft_lstnew(ft_calloc(1, sizeof(t_token)));
+				redir_lst_tmp = ft_lstnew(ft_calloc(1, sizeof(t_token)));
+				ft_lstadd_back(&redir_lst, redir_lst_tmp);
 			}
 			((t_token *)redir_lst_tmp->content)->ud.redir_type = \
 			ft_calloc(1, sizeof(t_red));
 			((t_token *)redir_lst_tmp->content)->type = REDIR;
-			((t_token *)redir_lst_tmp->content)->ud.redir_type->file = \
-			((t_token *)tmp->next->content)->ud.str;
 			((t_token *)redir_lst_tmp->content)->ud.redir_type->redir_type = \
 			init_redir_type(((t_token *)tmp->content)->ud.str);
-			//if (((t_token *)redir_lst_tmp->content)->ud.redir_type->redir_type \
-			//== HEREDOC)
-			//	heredoc(&((t_token *)redir_lst_tmp->content)->ud.redir_type);
+			if (((t_token *)redir_lst_tmp->content)->ud.redir_type->redir_type \
+			== HEREDOC)
+				((t_token *)redir_lst_tmp->content)->ud.redir_type->file = \
+				heredoc(((t_token *)tmp->next->content)->ud.str);
+			else
+				((t_token *)redir_lst_tmp->content)->ud.redir_type->file = \
+				ft_strdup(((t_token *)tmp->next->content)->ud.str);
 		}
 		tmp = tmp->next;
 	}
@@ -177,7 +254,10 @@ char	**init_args(t_list *lst)
 		if (((t_token *)tmp->content)->type == PIPE)
 			break ;
 		if (((t_token *)tmp->content)->type == WORD)
-			args[i++] = ((t_token *)tmp->content)->ud.str;
+		{
+			((t_token *)tmp->content)->type = VISITED;
+			args[i++] = ft_strdup(((t_token *)tmp->content)->ud.str);
+		}
 		tmp = tmp->next;
 	}
 	return (args);
@@ -196,11 +276,12 @@ t_list	*init_cmd(t_list **lst)
 			break ;
 		if (((t_token *)tmp->content)->type == WORD)
 		{
+			((t_token *)tmp->content)->type = VISITED;
 			cmd_lst = ft_lstnew(ft_calloc(1, sizeof(t_token)));
-			((t_token *)cmd_lst->content)->ud.cmd = \
+			((t_token *)cmd_lst->content)->ud.cmd_type = \
 			ft_calloc(1, sizeof(t_cmd));
 			((t_token *)cmd_lst->content)->ud.cmd_type->cmd = \
-			((t_token *)tmp->content)->ud.str;
+			ft_strdup(((t_token *)tmp->content)->ud.str);
 			((t_token *)cmd_lst->content)->type = CMD;
 			((t_token *)cmd_lst->content)->ud.cmd_type->args = \
 			init_args(tmp->next);
@@ -211,14 +292,33 @@ t_list	*init_cmd(t_list **lst)
 	return (cmd_lst);
 }
 
-t_list	*init_pipe(t_li)
+t_list	*init_pipe(t_list **lst)
+{
+	t_list	*pipe_lst;
+
+	((t_token *)(*lst)->content)->type = VISITED;
+	pipe_lst = ft_lstnew(ft_calloc(1, sizeof(t_token)));
+	((t_token *)pipe_lst->content)->type = PIPE;
+	((t_token *)pipe_lst->content)->ud.pipe_type = ft_calloc(1, sizeof(t_pip));
+	return (pipe_lst);
+}
+
+void	destory_tokenlst(t_list **lst)
+{
+	t_list	*tmp;
+
+	while ((*lst))
+	{
+		tmp = *lst;
+		*lst = (*lst)->next;
+		free((((t_token *)tmp->content))->ud.str);
+		free(tmp->content);
+		free(tmp);
+	}
+}
 
 int	organizetokenlst(t_list **lst)
 {
-	//기존의 token_list를 순회하며 파이프와 리다이렉션, 커맨드를 새로운 리스트로 만들어야함
-	// 1. 파이프를 만나기 전까지 새 리스트에 리다이랙션을 넣는다.
-	// 2. 파이프를 만나기 전까지 샐 리스트에 커맨드를 넣는다.
-	// 3. 파이프를 만나면 새 리스트를 만들고 1,2번을 반복한다.
 	t_list	*tmp;
 	t_list	*new_lst;
 
@@ -232,16 +332,22 @@ int	organizetokenlst(t_list **lst)
 			ft_lstadd_back(&new_lst, init_cmd(&tmp));
 		else if (((t_token *)tmp->content)->type == PIPE)
 			ft_lstadd_back(&new_lst, init_pipe(&tmp));
+		tmp = tmp->next;
 	}
+	destory_tokenlst(lst);
+	*lst = new_lst;
+	return (0);
 }
 
 int	syntaxer(t_list **lst)
 {
 	if (check_syntax_error(*lst))
 		return (SYNTAX_ERR);
+	if (organizetokenlst(lst))
+		return (SYNTAX_ERR);
+	return (0);
 	// 기존 리스트를 실행직전의 리스트로 바꿔야함
 	// here_doc 처리 해야함
-
 }
 
 //void	syntaxer(t_list **lst, int *err)
