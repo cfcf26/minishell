@@ -6,7 +6,7 @@
 /*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:07 by ekwak             #+#    #+#             */
-/*   Updated: 2023/02/02 18:44:20 by ekwak            ###   ########.fr       */
+/*   Updated: 2023/02/05 01:00:34 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,38 @@ void	fill_tmp_file(int fd, char *limit)
 	free(buff);
 }
 
+void	here_doc_fork_signal(int fd, char *limit)
+{
+	int		pid;
+	int		status;
+	char	*buff;
+
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		while (1)
+		{
+			write(1, "pipe heredoc> ", 15);
+			buff = get_next_line(0);
+			if (!buff)
+				break ;
+			if (ft_strncmp(buff, limit, ft_max(ft_strlen(buff) - 1, \
+			ft_strlen(limit))) == 0)
+				break ;
+			write(fd, buff, ft_strlen(buff));
+			free(buff);
+		}
+		free(buff);
+		exit(0);
+	}
+	else
+		waitpid(pid, &status, 0);
+}
+
 char	*heredoc(char *limit)
 {
 	char	*file_name;
@@ -81,10 +113,7 @@ char	*heredoc(char *limit)
 		printf("infile error!");
 	fill_tmp_file(fd, limit);
 	close(fd);
-	if (data()->unlink_lst == NULL)
-		data()->unlink_lst = ft_lstnew(file_name);
-	else
-		ft_lstadd_back(&data()->unlink_lst, ft_lstnew(file_name));
+	ft_lstadd_back(&data()->unlink_lst, ft_lstnew(file_name));
 	return (file_name);
 }
 
@@ -141,21 +170,24 @@ int	redir_syntax_error(t_list *node, t_list *next)
 
 int	check_syntax_error(t_list *lst)
 {
-	if (((t_token *)lst->content)->type == PIPE)
+	t_list	*tmp;
+
+	tmp = lst;
+	if (((t_token *)tmp->content)->type == PIPE)
 		return (SYNTAX_ERR);
-	while (lst)
+	while (tmp)
 	{
-		if (lst->content && ((t_token *)lst->content)->type == PIPE)
+		if (tmp->content && ((t_token *)tmp->content)->type == PIPE)
 		{
-			if (pipe_syntax_error(lst, lst->next))
+			if (pipe_syntax_error(tmp, tmp->next))
 				return (SYNTAX_ERR);
 		}
-		else if (lst->content && ((t_token *)lst->content)->type == REDIR)
+		else if (tmp->content && ((t_token *)tmp->content)->type == REDIR)
 		{
-			if (redir_syntax_error(lst, lst->next))
+			if (redir_syntax_error(tmp, tmp->next))
 				return (SYNTAX_ERR);
 		}
-		lst = lst->next;
+		tmp = tmp->next;
 	}
 	return (0);
 }
@@ -326,11 +358,9 @@ int	organizetokenlst(t_list **lst)
 	new_lst = NULL;
 	while (tmp)
 	{
-		if (((t_token *)tmp->content)->type == REDIR)
-			ft_lstadd_back(&new_lst, init_redir_lst(&tmp));
-		else if (((t_token *)tmp->content)->type == WORD)
-			ft_lstadd_back(&new_lst, init_cmd(&tmp));
-		else if (((t_token *)tmp->content)->type == PIPE)
+		ft_lstadd_back(&new_lst, init_redir_lst(&tmp));
+		ft_lstadd_back(&new_lst, init_cmd(&tmp));
+		if (tmp && ((t_token *)tmp->content)->type == PIPE)
 			ft_lstadd_back(&new_lst, init_pipe(&tmp));
 		tmp = tmp->next;
 	}
