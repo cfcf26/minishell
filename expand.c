@@ -54,5 +54,5 @@ char	*expanding(char *str, t_envp_list *envp_list)
 	res->content = NULL;
 	//split_exp_str(str_data->str, res);
 	//remove_quote(res);
-	return (str_data.str);
+	return (res);
 }
