@@ -277,9 +277,14 @@ static void exe(t_list *lst)
 		execve(cmd->cmd, lst2arr(expandings), lst2arr(data()->envp));
 	}
 	if (data()->pipe_last_fd != -1)
+	{
 		close(data()->pipe_last_fd);
-	close(data()->pipe_fd[PIPE_WRITE]);
-	data()->pipe_last_fd = data()->pipe_fd[PIPE_READ];
+		data()->pipe_last_fd = -1;
+	}
+	if (pipe_lst != NULL)
+		close(data()->pipe_fd[PIPE_WRITE]);
+	if (pipe_lst != NULL)
+		data()->pipe_last_fd = data()->pipe_fd[PIPE_READ];
 
 	// 정리
 	t_list	*node = ft_lstnew(intdup(pid));
@@ -324,11 +329,6 @@ void execute(t_list *parsed_list)
 	{
 		exe(next);
 		ft_lstclear(&next, NULL);
-	}
-	if (data()->pipe_last_fd != -1)
-	{
-		close(data()->pipe_last_fd);
-		data()->pipe_last_fd = -1;
 	}
 	t_list *waitpids = data()->waitpid_lst;
 	while (waitpids)
