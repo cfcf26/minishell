@@ -12,42 +12,47 @@
 
 #include "minishell.h"
 
-t_exp_data	*expand_variables(char *str)
+t_exp_data	expand_variables(char *str, t_exp_data *str_data, t_envp_list *list)
 {
 	int			i;
-	t_exp_data	*str_data;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != '$')
+		if (str_data->quote == '\'' || str[i] != '$')
 		{
+			if (str[i] == '\"' || str[i] == '\'')
+				str_data->quote = check_quote(str_data->quote, str[i]);
 			str_data->len++;
 			i++;
 		}
-		else
+		else if (str[i] == '$' && str_data->quote != '\'')
 		{
-			str_data->key = find_key(str, i);
-			str_data->value = ft_lstncmp(str, str_data->key);
-			strs_join(str, i, str_data);
-			str_data->len = 0;
-			i + str_data->key;
+			str_data->value = expand_env(str, i, str_data, list);
+			str_data->str = strs_join(str, i, str_data);
+			i = i + str_data->key_len;
+			*str_data = reset_exp_data(str_data, 1);
 		}
 	}
-	if (str_data->len > 0)
-		strs_join(str, i, str_data);
-	return (str_data);
+	if (str_data->len > 1)
+		str_data->str = strs_join(str, i, str_data);
+	return (*str_data);
 }
 
-t_list	*expanding(char *str)
+char	*expanding(char *str, t_envp_list *envp_list)
 {
 	char		*expanded_str;
-	t_exp_node	*str_data;
+	t_exp_data	str_data;
+	t_envp_list	*envp_list;
 	t_list		*res;
 
-	res = ft_malloc(sizeof(t_list *));
-	str_data = expand_variables(*str);
-	split_exp_str(str_data->str, res);
-	remove_quote(res);
-	return (res);
+	res = ft_malloc_guard(sizeof(t_list *));
+	envp_list = set_envp_list(envp);
+	str_data = reset_exp_data(&str_data, 0);
+	str_data = expand_variables(str, &str_data, envp_list);
+	res->content = str_data->str;
+	res->content = NULL;
+	//split_exp_str(str_data->str, res);
+	//remove_quote(res);
+	return (str_data.str);
 }
