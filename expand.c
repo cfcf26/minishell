@@ -39,20 +39,18 @@ t_exp_data	expand_variables(char *str, t_exp_data *str_data, t_envp_list *list)
 	return (*str_data);
 }
 
-char	*expanding(char *str, t_envp_list *envp_list)
+t_list	
+char	*expanding(char *str)
 {
 	char		*expanded_str;
 	t_exp_data	str_data;
 	t_envp_list	*envp_list;
 	t_list		*res;
 
-	res = ft_malloc_guard(sizeof(t_list *));
 	envp_list = set_envp_list(envp);
 	str_data = reset_exp_data(&str_data, 0);
 	str_data = expand_variables(str, &str_data, envp_list);
-	res->content = str_data->str;
-	res->content = NULL;
-	//split_exp_str(str_data->str, res);
-	//remove_quote(res);
+	split_exp_str(str_data->str, res);
+	remove_quote(res);
 	return (res);
 }

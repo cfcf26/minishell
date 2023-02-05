@@ -42,7 +42,7 @@ char	*get_envp_value(char *envp)
 	return (res);
 }
 
-t_envp_list	*new_node(void)
+t_envp_list	*envp_new_node(void)
 {
 	t_envp_list	*tmp;
 
@@ -61,7 +61,7 @@ t_envp_list	*set_envp_list(char **envp)
 	t_envp_list	*list;
 	t_envp_list	*head;
 
-	list = new_node();
+	list = envp_new_node();
 	head = list;
 	while (*envp)
 	{
