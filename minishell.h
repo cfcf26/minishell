@@ -29,13 +29,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
-<<<<<<< HEAD
 
 # define PIPE_READ 0
 # define PIPE_WRITE 1
-=======
-# include "tree.h"
->>>>>>> 418c71a0bcb0832ec5e16d99cc85588408a1cd41
 
 typedef enum e_token_type
 {
@@ -103,12 +99,20 @@ typedef struct s_exp_node
 typedef struct s_exp_data
 {
 	int					len;
+	int					key_len;
+	char				quote;
 	char				*value;
 	char				*key;
-	char				quote;
-	char				*cur;
 	char				*str;
 }	t_exp_data;
+
+typedef struct s_envp_list
+{
+	int					len;
+	char				*key;
+	char				*value;
+	struct s_envp_list	*next;
+}t_envp_list;
 
 void		init_signal(void);
 void		init_envp(char **envp);
@@ -116,5 +120,17 @@ void		execute(t_list *parsed_list);
 t_list		*expanding(char *str);
 int			parse(char *line, t_list **result);
 t_ms		*data();
+t_envp_list	*set_envp_list(char **envp);
+t_exp_data	reset_exp_data(t_exp_data *node, int flag);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*ft_strchr(const char *s, int c);
+char		*strs_join(char *str, int offset, t_exp_data *str_data);
+char		*expand_env(char *str, int offset, t_exp_data *str_data, \
+t_envp_list *list);
+char		*ft_strjoin(char const *s1, char const *s2);
+size_t		ft_strlen(const char *s);
+char		*ft_strjoin(char const *s1, char const *s2);
+size_t		ft_strlen(const char *s);
+char		check_quote(char last_quote, char now_quote);
 
 #endif
