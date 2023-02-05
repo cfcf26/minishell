@@ -6,12 +6,12 @@
 /*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 12:12:07 by ekwak             #+#    #+#             */
-/*   Updated: 2023/02/05 01:00:34 by ekwak            ###   ########.fr       */
+/*   Updated: 2023/02/05 20:13:41 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "lib/gnl/get_next_line.h"
+//#include "lib/gnl/get_next_line.h"
 
 int ft_max(int x, int y)
 {
