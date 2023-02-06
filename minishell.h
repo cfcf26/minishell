@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/01 22:32:03 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/06 19:23:49 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <term.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
+# include "./lib/libft/libft.h"
 
 # define PIPE_READ 0
 # define PIPE_WRITE 1
@@ -90,12 +90,6 @@ typedef struct s_token
 	t_utoken		ud;
 }	t_token;
 
-typedef struct s_exp_node
-{
-	char		*str;
-	t_exp_node	*next;
-}	t_exp_node;
-
 typedef struct s_exp_data
 {
 	int					len;
@@ -117,7 +111,8 @@ typedef struct s_envp_list
 void		init_signal(void);
 void		init_envp(char **envp);
 void		execute(t_list *parsed_list);
-t_list		*expanding(char *str);
+//char		*expanding(char *str, char **envp);
+t_list		*expanding(char *str, char **envp);
 int			parse(char *line, t_list **result);
 t_ms		*data();
 t_envp_list	*set_envp_list(char **envp);
@@ -132,5 +127,7 @@ size_t		ft_strlen(const char *s);
 char		*ft_strjoin(char const *s1, char const *s2);
 size_t		ft_strlen(const char *s);
 char		check_quote(char last_quote, char now_quote);
+char		*exception_dollor(char *str, t_exp_data *str_data);
+t_list		*split_exp_str(char *str, t_exp_data *str_data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 13:13:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/03 20:05:12 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/06 14:07:06 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_envp_list	*set_envp_list(char **envp)
 		list->key = get_envp_key(*envp);
 		list->value = get_envp_value(*envp);
 		list->len++;
-		list->next = new_node();
+		list->next = envp_new_node();
 		list = list->next;
 		envp++;
 	}

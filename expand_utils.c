@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/01 19:34:17 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/06 21:53:32 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 int	is_valid_name(char c)
 {
-	const char	material[63] = "abcdefghijklmnopqrxtuvwxyz\
+	const char	*material = "abcdefghijklmnopqrxtuvwxyz\
 ABCDEFGHIJKLMNOPQRXTUVWXYZ0123456789_";
-
 	if (ft_strchr(material, c) != NULL)
 		return (1);
 	else
@@ -28,9 +27,9 @@ char	*find_key(char *str, int offset, t_exp_data *str_data)
 	int		i;
 	char	*key;
 
-	i = 0;
-	if (str[offset + i] >= '0' && str[offset + i] <= '9')
+	if (str[offset + 1] >= '0' && str[offset + 1] <= '9')
 		return (&(str[offset + i]));
+	i = 0;
 	while (is_valid_name(str[offset + 1 + i]))
 		i++;
 	key = ft_substr(str, offset + 1, i);
@@ -57,23 +56,26 @@ t_envp_list *list)
 		}
 		tmp = tmp->next;
 	}
+	free(str_data->key);
 	return (NULL);
 }
 
 char	*strs_join(char *str, int offset, t_exp_data *str_data)
 {
+	char	*previous;
 	char	*tmp;
-	char	*tmp2;
 	char	*res;
 
-	tmp = ft_substr(str, offset - str_data->len + 1, str_data->len - 1);
-	if (str_data->str == NULL)
-		tmp2 = tmp;
+	previous = ft_substr(str, offset - str_data->len + 1, str_data->len - 1);
 	if (str_data->value != NULL)
-		res = ft_strjoin(tmp2, str_data->value);
+		res = ft_strjoin(previous, str_data->value);
 	else
-		res = ft_strjoin(str_data->str, tmp);
-	free(tmp);
+	{
+		if (str_data->str == NULL)
+			return (previous);
+		res = ft_strjoin(str_data->str, previous);
+	}
+	free(previous);
 	free(str_data->str);
 	return (res);
 }
@@ -121,4 +123,13 @@ char	check_quote(char last_quote, char now_quote)
 	}
 	else
 		return (now_quote);
+}
+
+char	*exception_dollor(char *str, t_exp_data *str_data)
+{
+	free(str_data->str);
+	if (str[0] == '$' && str[1] == '\0')
+		return ("$");
+	else
+		return ("86400");
 }
