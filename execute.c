@@ -26,20 +26,18 @@ char	*get_env(char *str)
 	return (NULL);
 }
 
-void	set_env(char *env)
-{
-	if (1/* exist */)
-		;// edit
-	else if (1/* exist == false */)
-		;// add
-}
+// void	set_env(char *env)
+// {
+// 	if (1/* exist */)
+// 		;// edit
+// 	else if (1/* exist == false */)
+// 		;// add
+// }
 
 char	*join_path(char *p1, char *p2)
 {
-	const int	size1 = ft_strlen(p1);
-	const int	size2 = ft_strlen(p2);
-	const char	*s1;
-	const char	*s2;
+	char	*s1;
+	char	*s2;
 
 	s1 = ft_strjoin(p1, "/");
 	s2 = ft_strjoin(s1, p2);
@@ -47,28 +45,61 @@ char	*join_path(char *p1, char *p2)
 	return (s2);
 }
 
+static void	placeholder(t_list *argv)
+{
+	printf("------ %p ------\n", argv->content);
+}
+
+static void	*get_builtin_func(char *cmd)
+{
+	static const t_func	built[] = {
+	{"echo", placeholder},
+	{"cd", placeholder},
+	{"pwd", placeholder},
+	{"export", placeholder},
+	{"unset", placeholder},
+	{"env", placeholder},
+	{"exit", placeholder},
+	{NULL, NULL}
+	};
+	int					i;
+
+	if (cmd == NULL)
+		return (NULL);
+	i = -1;
+	while (built[++i].name)
+		if (ft_strncmp(cmd, built[i].name, ft_strlen(built[i].name) + 1) == 0)
+			return (built[i].func);
+	return (NULL);
+}
+
 char	*get_path(char *str)
 {
-	const char	*path = get_env("PATH");
-	char		**paths = ft_split(path, ':');
-	char		*s;
-	int			i;
+	char	*path;
+	char	**paths;
+	char	*s;
+	int		i;
 
+	path = get_env("PATH");
 	paths = ft_split(path, ':');
+	free(path);
 	if (paths == NULL)
-		return (NULL);
+		return (ft_strdup(str));
 	i = -1;
 	while (paths[++i])
 	{
 		s = join_path(paths[i], str);
 		if (access(s, AT_EACCESS) == 0)
-			return (s);
+			break ;
 		free(s);
 	}
 	i = -1;
 	while (paths[++i])
 		free(paths[i]);
 	free(paths);
+	if (s == NULL || access(s, AT_EACCESS) != 0)
+		return (ft_strdup(str));
+	return (s);
 }
 
 char	**lst2arr(t_list *lst)
@@ -90,93 +121,25 @@ char	**lst2arr(t_list *lst)
 	return (arr);
 }
 
-// static void exe(t_token *token)
+// static void print_exe_test(t_list *lst)
 // {
-// 	if (token->type == PIPE)
-// 	{
-// 		if (pipe(data()->pipe_fd))
-// 			exit(1); // pipe error
-// 	}
-// 	if (token->type == CMD)
-// 	{
-// 		t_list	*lst;
-// 		int		idx;
+// 	t_token	*t;
 
-// 		idx = -1;
-// 		lst = NULL;
-// 		while (token->ud.cmd_type->args[++idx])
-// 			ft_lstadd_back(&lst, expanding(token->ud.cmd_type->args[idx]));
-// 		if (ft_lstsize(lst) == 0 || *((char *)(lst->content)) == 0)
-// 			return; // 실행할 파일 없음
-// 		token->ud.cmd_type->cmd = get_path(lst->content);
-// 		int pid = fork();
-// 		if (pid == 0)
-// 			execve(token->ud.cmd_type->cmd, lst2arr(lst), lst2arr(data()->envp));
-// 		if (pid == -1)
-// 			exit(1); // pid error
-// 		t_list *node = ft_lstnew(intdup(pid));
-// 		if (node == NULL)
-// 			exit(1); // null guard
-// 		ft_lstadd_back(&(data()->waitpid_lst), node);
-// 		ft_lstclear(&lst, free);
-// 	}
-// 	if (token->type == REDIR)
+// 	while (lst)
 // 	{
-// 		int 	type = token->ud.redir_type->redir_type;
-// 		char 	*file = token->ud.redir_type->file;
-// 		t_list 	*lst = expanding(file);
-// 		int		fd;
-
-// 		if (ft_lstsize(lst) != 1)
-// 			exit(1); // ambiguous redirect
-// 		if (type == IN)
-// 			fd = open(lst->content, O_RDONLY);
-// 		else if (type == OUT)
-// 			fd = open(lst->content, O_WRONLY | O_TRUNC);
-// 		else if (type == APPEND)
-// 			fd = open(lst->content, O_WRONLY | O_APPEND);
-// 		else
-// 			exit(1); // unexpected case
-// 		if (type == IN && dup2(fd, data()->pipe_fd[PIPE_READ]))
-// 			exit(1); // dup2 error
-// 		if (type == OUT && dup2(fd, data()->pipe_fd[PIPE_WRITE]))
-// 			exit(1); // dup2 error
-// 		if (type == APPEND && dup2(fd, data()->pipe_fd[PIPE_WRITE]))
-// 			exit(1); // dup2 error
-// 		close(fd);
-// 		ft_lstclear(&lst, free);
+// 		t = lst->content;
+// 		if (t->type == PIPE)
+// 			printf("PIPE\n");
+// 		if (t->type == REDIR)
+// 			printf("RED %d %s\n", t->ud.redir_type->redir_type, t->ud.redir_type->file);
+// 		if (t->type == CMD)
+// 			printf("CMD %s\n", t->ud.cmd_type->args[0]);
+// 		lst = lst->next;
 // 	}
+// 	printf("\n");
 // }
 
-static void print_exe_test(t_list *lst)
-{
-	t_token	*t;
-
-	while (lst)
-	{
-		t = lst->content;
-		if (t->type == PIPE)
-			printf("PIPE\n");
-		if (t->type == REDIR)
-			printf("RED %d %s\n", t->ud.redir_type->redir_type, t->ud.redir_type->file);
-		if (t->type == CMD)
-			printf("CMD %s\n", t->ud.cmd_type->args[0]);
-		lst = lst->next;
-	}
-	printf("\n");
-}
-
-static int	*next_token(t_list **lst, t_token **t)
-{
-	*t = NULL;
-	if (*lst == NULL)
-		return (NULL);
-	*t = (*lst)->content;
-	(*lst) = (*lst)->next;
-	return (*t != NULL);
-}
-
-static t_list *token_filter(t_list *lst, int type)
+static t_list *token_filter(t_list *lst, t_token_type type)
 {
 	t_list	*res;
 	t_list	*node;
@@ -196,7 +159,7 @@ static t_list *token_filter(t_list *lst, int type)
 	return (res);
 }
 
-static void redir(t_list *redir_lst)
+static int redir(t_list *redir_lst)
 {
 	while (redir_lst)
 	{
@@ -206,58 +169,60 @@ static void redir(t_list *redir_lst)
 
 		if (ft_lstsize(file) != 1)
 			exit(1); // ambiguous redirect
+		fd = -1;
 		if (red->redir_type == IN)
 			fd = open(file->content, O_RDONLY);
 		else if (red->redir_type == OUT)
 			fd = open(file->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (red->redir_type == APPEND)
 			fd = open(file->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			exit(1); // unexpected case
-		if (fd != -1)
-		{
-			if (red->redir_type == IN && dup2(fd, STDIN_FILENO) == -1)
-				exit(1); // dup2 error
-			if (red->redir_type == OUT && dup2(fd, STDOUT_FILENO) == -1)
-				exit(1); // dup2 error
-			if (red->redir_type == APPEND && dup2(fd, STDOUT_FILENO) == -1)
-				exit(1); // dup2 error
-			close(fd);
-		}
 		ft_lstclear(&file, free);
+		if (fd == -1)
+		{
+			ft_putstr_fd("this is error\n", STDERR_FILENO);
+			return (1);
+		}
+		if (red->redir_type == IN && dup2(fd, STDIN_FILENO) == -1)
+			exit(1); // dup2 error
+		if (red->redir_type == OUT && dup2(fd, STDOUT_FILENO) == -1)
+			exit(1); // dup2 error
+		if (red->redir_type == APPEND && dup2(fd, STDOUT_FILENO) == -1)
+			exit(1); // dup2 error
+		close(fd);
 		redir_lst = redir_lst->next;
 	}
+	return (0);
 }
 
-static void exe(t_list *lst)
+static t_list *exe_expand_all(char **args)
 {
-	const t_list	*cmd_lst = token_filter(lst, CMD);
-	const t_list	*redir_lst = token_filter(lst, REDIR);
-	const t_list	*pipe_lst = token_filter(lst, PIPE);
-	t_cmd			*cmd;
-	t_list			*expandings;
-	int				idx;
+	t_list	*expandings;
+	int		idx;
 
-	cmd = ((t_token *)(cmd_lst->content))->ud.cmd_type;
-
-
-	// expanding
 	expandings = NULL;
 	idx = -1;
-	while (cmd->args[++idx])
-		ft_lstadd_back(&expandings, expanding(cmd->args[idx]));
+	while (args[++idx])
+		ft_lstadd_back(&expandings, expanding(args[idx]));
+	return (expandings);
+}
 
+static int	is_empty(t_list *lst)
+{
+	return (ft_lstsize(lst) == 0 || *((char *)(lst->content)) == 0);
+}
 
-	// 실행할 프로그램의 절대경로를 가져옴
-	if (ft_lstsize(expandings) == 0 || *((char *)(expandings->content)) == 0)
-		return ; // 실행할 파일 없음
-	cmd->cmd = get_path(expandings->content);
+static int	is_single_builtin(int use_pipe, char *cmd)
+{
+	return (!use_pipe && data()->waitpid_lst == NULL && get_builtin_func(cmd));
+}
 
+static void exe_body(int use_pipe, t_cmd *cmd, t_list *redir_lst, t_list *expandings)
+{
+	int	pid;
 
-	// 실행
-	if (pipe_lst != NULL)
+	if (use_pipe)
 		pipe(data()->pipe_fd);
-	int	pid = fork();
+	pid = fork();
 	if (pid == -1)
 		exit(1); // pid error
 	if (pid == 0)
@@ -267,30 +232,67 @@ static void exe(t_list *lst)
 			dup2(data()->pipe_last_fd, STDIN_FILENO);
 			close(data()->pipe_last_fd);
 		}
-		if (pipe_lst != NULL)
+		if (use_pipe)
 		{
 			close(data()->pipe_fd[PIPE_READ]);
 			dup2(data()->pipe_fd[PIPE_WRITE], STDOUT_FILENO);
 			close(data()->pipe_fd[PIPE_WRITE]);
 		}
-		redir(redir_lst);
-		execve(cmd->cmd, lst2arr(expandings), lst2arr(data()->envp));
+		if (redir(redir_lst) == 0)
+			execve(cmd->cmd, lst2arr(expandings), lst2arr(data()->envp));
 	}
 	if (data()->pipe_last_fd != -1)
 	{
 		close(data()->pipe_last_fd);
 		data()->pipe_last_fd = -1;
 	}
-	if (pipe_lst != NULL)
+	if (use_pipe)
 		close(data()->pipe_fd[PIPE_WRITE]);
-	if (pipe_lst != NULL)
+	if (use_pipe)
 		data()->pipe_last_fd = data()->pipe_fd[PIPE_READ];
-
-	// 정리
 	t_list	*node = ft_lstnew(intdup(pid));
 	if (node == NULL)
 		exit(1); // null guard
 	ft_lstadd_back(&(data()->waitpid_lst), node);
+}
+
+static void run_builtin(t_list *redir_lst, t_list *expandings)
+{
+	void (*func)(t_list *argv);
+
+	if (redir(redir_lst) != 0)
+		return ;
+	
+	func = get_builtin_func(expandings->content);
+	func(expandings);
+}
+
+static void exe(t_list *lst)
+{
+	t_list	*cmd_lst;
+	t_list	*redir_lst;
+	t_list	*pipe_lst;
+	t_list	*expandings;
+	t_cmd	*cmd;
+
+	cmd_lst = token_filter(lst, CMD);
+	redir_lst = token_filter(lst, REDIR);
+	pipe_lst = token_filter(lst, PIPE);
+	cmd = ((t_token *)(cmd_lst->content))->ud.cmd_type;
+	expandings = exe_expand_all(cmd->args);
+	if (is_empty(expandings))
+	{
+		ft_lstclear(&expandings, free);
+		return ;
+	}
+	if (is_single_builtin(pipe_lst != NULL, expandings->content))
+		run_builtin(redir_lst, expandings);
+	else
+	{
+		cmd->cmd = get_path(expandings->content);
+		exe_body(pipe_lst != NULL, cmd, redir_lst, expandings);
+		free(cmd->cmd);
+	}
 	ft_lstclear(&expandings, free);
 	ft_lstclear(&cmd_lst, NULL);
 	ft_lstclear(&redir_lst, NULL);
@@ -320,24 +322,49 @@ int	next_cmd(t_list **lst, t_list **next)
 	return (*next != NULL);
 }
 
+static void backup_stdio_fd()
+{
+	data()->backup_stdio_fd[STDIN_FILENO] = dup(STDIN_FILENO);
+	data()->backup_stdio_fd[STDOUT_FILENO] = dup(STDOUT_FILENO);
+}
+
+static void reload_stdio_fd()
+{
+	dup2(data()->backup_stdio_fd[STDIN_FILENO], STDIN_FILENO);
+	close(data()->backup_stdio_fd[STDIN_FILENO]);
+	dup2(data()->backup_stdio_fd[STDOUT_FILENO], STDOUT_FILENO);
+	close(data()->backup_stdio_fd[STDOUT_FILENO]);
+}
+
+static int	wait_pipe_processes(t_list *waitpids)
+{
+	int	err;
+	int	pid;
+
+	while (waitpids)
+	{
+		pid = *((int *)(waitpids->content));
+		if (waitpids->next == NULL)
+			waitpid(pid, &err, 0);
+		else
+			waitpid(pid, NULL, 0);
+		waitpids = waitpids->next;
+	}
+	return (err);
+}
+
 void execute(t_list *parsed_list)
 {
 	t_list	*next;
 
+	backup_stdio_fd();
 	data()->pipe_last_fd = -1;
 	while (next_cmd(&parsed_list, &next))
 	{
 		exe(next);
 		ft_lstclear(&next, NULL);
 	}
-	t_list *waitpids = data()->waitpid_lst;
-	while (waitpids)
-	{
-		int pid = *((int *)(waitpids->content));
-		if (waitpids->next == NULL)
-			waitpid(pid, &(data()->err), 0);
-		else
-			waitpid(pid, NULL, 0);
-		waitpids = waitpids->next;
-	}
+	data()->err = wait_pipe_processes(data()->waitpid_lst);
+	ft_lstclear(&(data()->waitpid_lst), free);
+	reload_stdio_fd();
 }

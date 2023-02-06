@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/10 16:20:24 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/13 14:09:53 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_ms
 	int		err;
 	int		pipe_fd[2];
 	int		pipe_last_fd;
+	int		backup_stdio_fd[2];
 	t_list	*envp;
 	t_list	*unlink_lst;
 	t_list	*waitpid_lst;
@@ -112,24 +113,23 @@ typedef struct s_envp_list
 void		init_signal(void);
 void		init_envp(char **envp);
 void		execute(t_list *parsed_list);
-//char		*expanding(char *str, char **envp);
-t_list		*expanding(char *str, char **envp);
 int			parse(char *line, t_list **result);
 t_ms		*data();
 t_envp_list	*set_envp_list(char **envp);
 t_exp_data	reset_exp_data(t_exp_data *node, int flag);
-char		*ft_substr(char const *s, unsigned int start, size_t len);
-char		*ft_strchr(const char *s, int c);
 char		*strs_join(char *str, int offset, t_exp_data *str_data);
 char		*expand_env(char *str, int offset, t_exp_data *str_data, \
 t_envp_list *list);
-char		*ft_strjoin(char const *s1, char const *s2);
-size_t		ft_strlen(const char *s);
-char		*ft_strjoin(char const *s1, char const *s2);
-size_t		ft_strlen(const char *s);
 char		check_quote(char last_quote, char now_quote);
 char		*exception_dollor(char *str, t_exp_data *str_data);
 t_list		*split_exp_str(char *str, t_exp_data *str_data);
 void		remove_quote(t_list *exp_list, t_exp_data *str_data);
+t_list		*expanding(char *str);
+
+typedef struct s_func
+{
+	char	*name;
+	void	*func;
+}	t_func;
 
 #endif
