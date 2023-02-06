@@ -12,14 +12,14 @@ int main (int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		line = readline("> ");
-		if (line)
+		if (line && ft_strncmp(line, "", 1) != 0)
 		{
-			if (ft_strncmp(line,"",1) != 0){
-				parse(line, &parsed) == 0;
+			if (parse(line, &parsed) == 0)
+			{
 				execute(parsed);
 				ft_lstclear(&parsed, NULL);
-				add_history(line);
 			}
+			add_history(line);
 		}
 		free(line);
 	}
