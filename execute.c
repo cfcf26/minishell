@@ -45,7 +45,7 @@ char	*join_path(char *p1, char *p2)
 	return (s2);
 }
 
-static void	placeholder(t_list *argv)
+static int	placeholder(t_list *argv)
 {
 	printf("------ %p ------\n", argv->content);
 }
@@ -159,6 +159,17 @@ static t_list *token_filter(t_list *lst, t_token_type type)
 	return (res);
 }
 
+static t_token *token_first(t_list *lst, t_token_type type)
+{
+	while (lst)
+	{
+		if (((t_token *)(lst->content))->type == type)
+			return (lst->content);
+		lst = lst->next;
+	}
+	return (NULL);
+}
+
 static int redir(t_list *redir_lst)
 {
 	while (redir_lst)
@@ -211,18 +222,19 @@ static int	is_empty(t_list *lst)
 	return (ft_lstsize(lst) == 0 || *((char *)(lst->content)) == 0);
 }
 
-static int	is_single_builtin(int use_pipe, char *cmd)
+static int	is_single_builtin(t_list *use_pipe, t_list *expandings)
 {
-	return (!use_pipe && data()->waitpid_lst == NULL && get_builtin_func(cmd));
+	const int		is_single = use_pipe == NULL && data()->waitpid_lst == NULL;
+
+	if (!is_single || expandings == NULL)
+		return (0);
+	return (get_builtin_func(expandings->content));
 }
 
-static void exe_body(int use_pipe, t_cmd *cmd, t_list *redir_lst, t_list *expandings)
+static int run_process(int use_pipe, t_list *redir_lst, t_list *expandings)
 {
-	int	pid;
+	const int	pid = fork();
 
-	if (use_pipe)
-		pipe(data()->pipe_fd);
-	pid = fork();
 	if (pid == -1)
 		exit(1); // pid error
 	if (pid == 0)
@@ -238,64 +250,66 @@ static void exe_body(int use_pipe, t_cmd *cmd, t_list *redir_lst, t_list *expand
 			dup2(data()->pipe_fd[PIPE_WRITE], STDOUT_FILENO);
 			close(data()->pipe_fd[PIPE_WRITE]);
 		}
-		if (redir(redir_lst) == 0)
-			execve(cmd->cmd, lst2arr(expandings), lst2arr(data()->envp));
+		if (redir(redir_lst))
+			exit(1);
+		if (expandings == NULL || expandings->content == '\0')
+			exit(0);
+		if (execve(get_path(expandings->content), lst2arr(expandings), lst2arr(data()->envp)))
+			exit(127);
 	}
 	if (data()->pipe_last_fd != -1)
 	{
 		close(data()->pipe_last_fd);
 		data()->pipe_last_fd = -1;
 	}
-	if (use_pipe)
-		close(data()->pipe_fd[PIPE_WRITE]);
-	if (use_pipe)
-		data()->pipe_last_fd = data()->pipe_fd[PIPE_READ];
 	t_list	*node = ft_lstnew(intdup(pid));
 	if (node == NULL)
 		exit(1); // null guard
 	ft_lstadd_back(&(data()->waitpid_lst), node);
+	return (pid);
 }
 
 static void run_builtin(t_list *redir_lst, t_list *expandings)
 {
 	void (*func)(t_list *argv);
 
-	if (redir(redir_lst) != 0)
+	if (redir(redir_lst))
 		return ;
-	
 	func = get_builtin_func(expandings->content);
 	func(expandings);
 }
 
-static void exe(t_list *lst)
+static int exe(t_list *parsed)
 {
-	t_list	*cmd_lst;
-	t_list	*redir_lst;
-	t_list	*pipe_lst;
-	t_list	*expandings;
-	t_cmd	*cmd;
+	const t_token	*use_pipe = token_first(parsed, PIPE);
+	const t_token	*cmd = token_first(parsed, CMD);
+	const t_list	*redirections = token_filter(parsed, REDIR);
+	t_list			*expandings;
+	int				pid;
 
-	cmd_lst = token_filter(lst, CMD);
-	redir_lst = token_filter(lst, REDIR);
-	pipe_lst = token_filter(lst, PIPE);
-	cmd = ((t_token *)(cmd_lst->content))->ud.cmd_type;
-	expandings = exe_expand_all(cmd->args);
-	if (is_empty(expandings))
-	{
-		ft_lstclear(&expandings, free);
-		return ;
-	}
-	if (is_single_builtin(pipe_lst != NULL, expandings->content))
-		run_builtin(redir_lst, expandings);
+	pid = 0;
+	expandings = NULL;
+	if (cmd != NULL)
+		expandings = exe_expand_all(((t_token *)(cmd))->ud.cmd_type->args);
+
+
+	if (use_pipe)
+		pipe(data()->pipe_fd);
+
+
+	if (is_single_builtin(use_pipe, expandings))
+		run_builtin(redirections, expandings);
 	else
+		pid = run_process(use_pipe, redirections, expandings);
+
+
+	if (use_pipe)
 	{
-		cmd->cmd = get_path(expandings->content);
-		exe_body(pipe_lst != NULL, cmd, redir_lst, expandings);
-		free(cmd->cmd);
+		close(data()->pipe_fd[PIPE_WRITE]);
+		data()->pipe_last_fd = data()->pipe_fd[PIPE_READ];
 	}
-	ft_lstclear(&expandings, free);
-	ft_lstclear(&cmd_lst, NULL);
-	ft_lstclear(&redir_lst, NULL);
+	ft_lstclear(&redirections, NULL);
+	return (pid);
 }
 
 int	next_cmd(t_list **lst, t_list **next)
@@ -336,35 +350,43 @@ static void reload_stdio_fd()
 	close(data()->backup_stdio_fd[STDOUT_FILENO]);
 }
 
-static int	wait_pipe_processes(t_list *waitpids)
+static void	wait_pipe_processes(t_list *waitpids)
 {
 	int	err;
 	int	pid;
 
+	if (waitpids == NULL)
+		return ;
 	while (waitpids)
 	{
 		pid = *((int *)(waitpids->content));
-		if (waitpids->next == NULL)
-			waitpid(pid, &err, 0);
-		else
-			waitpid(pid, NULL, 0);
+		waitpid(pid, &err, 0);
 		waitpids = waitpids->next;
 	}
-	return (err);
+	data()->err = err;
 }
 
 void execute(t_list *parsed_list)
 {
 	t_list	*next;
+	t_list	*waitpid_node;
+	int		waitpid;
 
 	backup_stdio_fd();
 	data()->pipe_last_fd = -1;
 	while (next_cmd(&parsed_list, &next))
 	{
-		exe(next);
+		waitpid = exe(next);
+		if (waitpid)
+		{
+			waitpid_node = ft_lstnew(intdup(waitpid));
+			if (waitpid_node == NULL)
+				exit(1);
+			ft_lstadd_back(&(data()->waitpid_lst), waitpid_node);
+		}
 		ft_lstclear(&next, NULL);
 	}
-	data()->err = wait_pipe_processes(data()->waitpid_lst);
+	wait_pipe_processes(data()->waitpid_lst);
 	ft_lstclear(&(data()->waitpid_lst), free);
 	reload_stdio_fd();
 }
