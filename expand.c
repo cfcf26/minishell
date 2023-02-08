@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 22:35:16 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/06 22:39:31 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/08 21:40:21 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_list	*expanding(char *str, char **envp)
 	str_data = reset_exp_data(&str_data, 0);
 	str_data = expand_variables(str, &str_data, envp_list);
 	res = split_exp_str(str_data.str, &str_data);
-	remove_quote(res);
+	//remove_quote(res, str_data);
 	/*while (envp_list)
 	{
 		free(envp_list);
@@ -65,11 +65,11 @@ int	main(int argc, char **argv, char **envp)
 {
 	char *str1 = "\"ls\"$a\'\"$a\"\'";
 	char *str2 = "$PATH";
-	char *str3 = "$0";
+	char *str3 = "\"$SHELL\"\"$USER\"";
 	char *str4 = "asgjaljg\'$a\'";
 	t_list	*list;
 
-	list = expanding(str1, envp);
+	list = expanding(str2, envp);
 	while (list)
 	{
 	  printf("%s\n", (char *)list->content);

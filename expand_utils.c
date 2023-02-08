@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/06 21:53:32 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/08 21:41:43 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	is_valid_name(char c)
 {
 	const char	*material = "abcdefghijklmnopqrxtuvwxyz\
 ABCDEFGHIJKLMNOPQRXTUVWXYZ0123456789_";
+
 	if (ft_strchr(material, c) != NULL)
 		return (1);
 	else
