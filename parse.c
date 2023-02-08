@@ -152,6 +152,11 @@ void	lstprint(t_list *lst)
 	{
 		tmp = (t_token *)lst->content;
 		printf("type: %d\n", tmp->type);
+		if (tmp->type == CMD)
+		{
+			printf(" %s\n", tmp->ud.cmd_type->args[0]);
+			printf(" %s\n", tmp->ud.cmd_type->args[1]);
+		}
 		lst = lst->next;
 	}
 }
@@ -161,7 +166,7 @@ void	tokenclear(void *token)
 	if (((t_token *)token)->ud.str)
 		free(((t_token *)token)->ud.str);
 	free(token);
-}
+} 
 
 /// @brief 쉘 명령어를 담은 문자열을 실행 가능한 형태의 파싱리스트로 변환합니다.
 /// @param line 쉘 명령어를 담은 문자열

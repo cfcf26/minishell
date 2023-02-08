@@ -62,7 +62,7 @@ typedef struct s_ms
 	int		backup_stdio_fd[2];
 	t_list	*envp;
 	t_list	*unlink_lst; //삭제예정 파일 목록
-	t_list	*linked_lst;
+	t_list	*waitpid_lst;
 }	t_ms;
 
 typedef struct s_cmd

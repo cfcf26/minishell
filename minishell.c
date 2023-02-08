@@ -1,23 +1,12 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 15:33:22 by ekwak             #+#    #+#             */
-/*   Updated: 2023/02/08 21:41:00 by ekwak            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-void	init_signal(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
-}
+//컨디 는  종료!
+//컨씨 는 줄바꿈!
+//컨 역슬레쉬 는  아무것도 하지마!
+// void	print_new_line()
+// {
+// 	printf("\n");
+// }
 
 //릭 안나도록 수정해야함!!!!
 void	destroy_lst(t_list *lst)
@@ -38,8 +27,6 @@ void	destroy_lst(t_list *lst)
 				free(((t_token *)tmp->content)->ud.pipe_type);
 			else if (((t_token *)tmp->content)->type == REDIR)
 			{
-				//if (((t_token *)tmp->content)->ud.redir_type->file)
-					//free(((t_token *)tmp->content)->ud.redir_type->file);
 				free(((t_token *)tmp->content)->ud.redir_type);
 			}
 			else if (((t_token *)tmp->content)->type == CMD)
@@ -74,13 +61,19 @@ int	main(int argc, char *argv[], char *envp[])
 		line = readline("> ");
 		if (line && ft_strncmp(line, "", 1) != 0)
 		{
-			if (parse(line, &parsed) == 0)
+			parsed = NULL;
+			if (ft_strncmp(line,"",1) != 0)
 			{
-				execute(parsed);
-				ft_lstclear(&parsed, NULL);
+				if (parse(line, &parsed) == 0)
+				{
+					execute(parsed);
+					ft_lstclear(&parsed, NULL);
+				}
 			}
 			add_history(line);
 		}
+		if (line == NULL)
+			exit(0);
 		free(line);
 	}
 	return (0);

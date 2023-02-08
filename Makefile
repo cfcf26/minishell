@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/25 20:46:00 by yonshin           #+#    #+#              #
-#    Updated: 2023/02/01 22:31:43 by juykang          ###   ########seoul.kr   #
+#    Updated: 2023/02/13 14:12:11 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ OBJS = \
 	init_signal.o \
 	init_envp.o \
 	parse.o \
+	syntaxer.o \
 
 ifdef WITH_BONUS
 	OBJS = $(BONUS_OBJS)

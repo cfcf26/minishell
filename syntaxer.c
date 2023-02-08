@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   syntaxer.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/24 12:12:07 by ekwak             #+#    #+#             */
-/*   Updated: 2023/02/05 20:13:41 by ekwak            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 //#include "lib/gnl/get_next_line.h"
 
@@ -265,7 +253,6 @@ char	**init_args(t_list *lst)
 	int		argc;
 	int		i;
 
-	i = 0;
 	argc = 0;
 	tmp = lst;
 	while (tmp)
@@ -281,6 +268,7 @@ char	**init_args(t_list *lst)
 	args = ft_calloc(argc + 1, sizeof(char *));
 	args[argc] = NULL;
 	tmp = lst;
+	i = 0;
 	while (tmp)
 	{
 		if (((t_token *)tmp->content)->type == PIPE)
@@ -288,7 +276,8 @@ char	**init_args(t_list *lst)
 		if (((t_token *)tmp->content)->type == WORD)
 		{
 			((t_token *)tmp->content)->type = VISITED;
-			args[i++] = ft_strdup(((t_token *)tmp->content)->ud.str);
+			args[i] = ft_strdup(((t_token *)tmp->content)->ud.str);
+			i++;
 		}
 		tmp = tmp->next;
 	}
@@ -308,15 +297,12 @@ t_list	*init_cmd(t_list **lst)
 			break ;
 		if (((t_token *)tmp->content)->type == WORD)
 		{
-			((t_token *)tmp->content)->type = VISITED;
 			cmd_lst = ft_lstnew(ft_calloc(1, sizeof(t_token)));
 			((t_token *)cmd_lst->content)->ud.cmd_type = \
 			ft_calloc(1, sizeof(t_cmd));
-			((t_token *)cmd_lst->content)->ud.cmd_type->cmd = \
-			ft_strdup(((t_token *)tmp->content)->ud.str);
 			((t_token *)cmd_lst->content)->type = CMD;
 			((t_token *)cmd_lst->content)->ud.cmd_type->args = \
-			init_args(tmp->next);
+			init_args(tmp);
 			break ;
 		}
 		tmp = tmp->next;
