@@ -183,7 +183,7 @@ int	parse(char *line, t_list **result)
 	if (err == SYNTAX_ERR)
 		printf("syntax error\n");
 	//syntaxer(result, &err);
-	lstprint(*result);
+	// lstprint(*result);
 	//ft_lstclear(result, tokenclear);
 	
 	return (err);

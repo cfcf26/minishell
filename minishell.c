@@ -55,7 +55,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (0);
 	ft_memset(data(), 0, sizeof(t_ms));
 	init_signal();
-	//init_envp(envp);
+	init_envp(envp);
 	while (1)
 	{
 		line = readline("> ");
