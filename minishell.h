@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/08 21:38:34 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/10 16:20:24 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,6 @@ size_t		ft_strlen(const char *s);
 char		check_quote(char last_quote, char now_quote);
 char		*exception_dollor(char *str, t_exp_data *str_data);
 t_list		*split_exp_str(char *str, t_exp_data *str_data);
+void		remove_quote(t_list *exp_list, t_exp_data *str_data);
 
 #endif

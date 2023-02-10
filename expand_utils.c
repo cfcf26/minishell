@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/08 21:41:43 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/10 17:53:53 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	is_valid_name(char c)
 {
-	const char	*material = "abcdefghijklmnopqrxtuvwxyz\
-ABCDEFGHIJKLMNOPQRXTUVWXYZ0123456789_";
+	const char	*material = "abcdefghijklmnopqrstuvwxyz\
+ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 
-	if (ft_strchr(material, c) != NULL)
+	if (c != 0 && ft_strchr(material, c) != NULL)
 		return (1);
 	else
 		return (0);
@@ -43,19 +43,17 @@ t_envp_list *list)
 {
 	//t_ms	*ms;
 	char		*value;
-	t_envp_list	*tmp;
 
 	//ms = data();
 	str_data->key = find_key(str, offset, str_data);
-	tmp = list;
-	while (tmp->key)
+	while (list->key)
 	{
-		if (ft_strnstr(str_data->key, tmp->key, ft_strlen(str_data->key)))
+		if (ft_strnstr(str_data->key, list->key, ft_strlen(str_data->key)))
 		{
 			free(str_data->key);
-			return (tmp->value);
+			return (list->value);
 		}
-		tmp = tmp->next;
+		list = list->next;
 	}
 	free(str_data->key);
 	return (NULL);
@@ -69,7 +67,13 @@ char	*strs_join(char *str, int offset, t_exp_data *str_data)
 
 	previous = ft_substr(str, offset - str_data->len + 1, str_data->len - 1);
 	if (str_data->value != NULL)
-		res = ft_strjoin(previous, str_data->value);
+	{
+		if (str_data->str == NULL)
+			tmp = previous;
+		else
+			tmp = ft_strjoin(str_data->str, previous);
+		res = ft_strjoin(tmp, str_data->value);
+	}
 	else
 	{
 		if (str_data->str == NULL)
@@ -107,20 +111,20 @@ char	check_quote(char last_quote, char now_quote)
 	if (now_quote == '\"')
 	{
 		if (last_quote == '\"')
-			return (0);
+			return ('0');
 		else if (last_quote == '\'')
 			return ('\'');
 		else
-			return (now_quote);
+			return ('\"');
 	}
 	else if (now_quote == '\'')
 	{
 		if (last_quote == '\"')
 			return ('\"');
 		else if (last_quote == '\'')
-			return (0);
+			return ('0');
 		else
-			return (now_quote);
+			return ('\'');
 	}
 	else
 		return (now_quote);
@@ -132,5 +136,5 @@ char	*exception_dollor(char *str, t_exp_data *str_data)
 	if (str[0] == '$' && str[1] == '\0')
 		return ("$");
 	else
-		return ("86400");
+		return (ft_itoa(error));
 }

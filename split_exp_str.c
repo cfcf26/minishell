@@ -49,9 +49,3 @@ t_list	*split_exp_str(char *str, t_exp_data *str_data)
 	}
 	return (head);
 }
-
-
-int export(t_list *envp)
-{
-	// split_str(envp->content, "=")
-}
