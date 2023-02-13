@@ -42,7 +42,7 @@ static int	pipes(char *line, t_list **lst, int i, int *err)
 	}
 	else
 		*err = ms_lstadd_back(lst, token);
-	return (j + 1);
+	return (j);
 }
 
 static int	redirect(char *line, t_list **lst, int i, int *err)
