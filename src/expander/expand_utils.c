@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 14:38:11 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/13 17:14:19 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "expand.h"
+#include "model.h"
 
 int	is_valid_name(char c)
 {
@@ -29,7 +31,7 @@ char	*find_key(char *str, int offset, t_exp_data *str_data)
 	char	*key;
 
 	if (str[offset + 1] >= '0' && str[offset + 1] <= '9')
-		return (&(str[offset + i]));
+		return (&(str[offset + 1]));
 	i = 0;
 	while (is_valid_name(str[offset + 1 + i]))
 		i++;
@@ -42,7 +44,6 @@ char	*expand_env(char *str, int offset, t_exp_data *str_data, \
 t_envp_list *list)
 {
 	//t_ms	*ms;
-	char		*value;
 
 	//ms = data();
 	str_data->key = find_key(str, offset, str_data);
@@ -136,5 +137,6 @@ char	*exception_dollor(char *str, t_exp_data *str_data)
 	if (str[0] == '$' && str[1] == '\0')
 		return ("$");
 	// else
-	// 	return (ft_itoa(error));
+	//return (ft_itoa(error));
+	return (0);
 }

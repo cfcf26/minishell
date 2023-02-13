@@ -21,7 +21,8 @@ typedef enum e_token_type
 	REDIR,
 	PIPE,
 	CMD,
-	WORD
+	WORD,
+	VISITED
 }	t_token_type;
 
 typedef enum e_redir_type

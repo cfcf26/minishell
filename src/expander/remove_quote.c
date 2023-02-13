@@ -1,4 +1,6 @@
 #include "minishell.h"
+#include "expand.h"
+#include "model.h"
 
 void	in_quote(char *str, int offset, t_exp_data *str_data)
 {

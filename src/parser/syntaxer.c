@@ -1,5 +1,6 @@
 #include "minishell.h"
 //#include "lib/gnl/get_next_line.h"
+#include "parse.h"
 
 int ft_max(int x, int y)
 {
@@ -105,24 +106,24 @@ char	*heredoc(char *limit)
 	return (file_name);
 }
 
-void	print_syntax(t_list **lst)
-{
-	t_list	*tmp;
-	t_token	*token;
+//void	print_syntax(t_list **lst)
+//{
+//	t_list	*tmp;
+//	t_token	*token;
 
-	tmp = *lst;
-	while (tmp)
-	{
-		token = tmp->content;
-		if (token->type == CMD)
-			printf("CMD: %s\n", token->ud.cmd_type->cmd);
-		else if (token->type == PIPE)
-			printf("PIPE\n");
-		else if (token->type == REDIR)
-			printf("REDIR : %s\n", token->ud.redir_type->file);
-		tmp = tmp->next;
-	}
-}
+//	tmp = *lst;
+//	while (tmp)
+//	{
+//		token = tmp->content;
+//		if (token->type == CMD)
+//			printf("CMD: %s\n", token->ud.cmd_type->cmd);
+//		else if (token->type == PIPE)
+//			printf("PIPE\n");
+//		else if (token->type == REDIR)
+//			printf("REDIR : %s\n", token->ud.redir_type->file);
+//		tmp = tmp->next;
+//	}
+//}
 
 int	pipe_syntax_error(t_list *node, t_list *next)
 {
@@ -185,6 +186,7 @@ t_redir_type	init_redir_type(char *str)
 	t_redir_type	redir_type;
 	const int		len = ft_strlen(str);
 
+	redir_type = 0;
 	if (len == 1)
 	{
 		if (str[0] == '>')

@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 22:35:16 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 14:15:53 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/13 17:14:56 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "expand.h"
+#include "model.h"
 
 t_exp_data	expand_variables(char *str, t_exp_data *str_data, t_envp_list *list)
 {
@@ -36,7 +38,7 @@ t_exp_data	expand_variables(char *str, t_exp_data *str_data, t_envp_list *list)
 	}
 	if (str_data->len > 1)
 		str_data->str = strs_join(str, i, str_data);
-	if ((str[0] == '$' && str[1] == '\0') || str[0] == '$' && str[1] == '?')
+	if ((str[0] == '$' && str[1] == '\0') || (str[0] == '$' && str[1] == '?'))
 		str_data->str = exception_dollor(str, str_data);
 	return (*str_data);
 }
@@ -62,7 +64,6 @@ static char	**lst2arr(t_list *lst)
 
 t_list	*expanding(char *str)
 {
-	char		*expanded_str;
 	t_exp_data	str_data;
 	t_envp_list	*envp_list;
 	t_list		*res;

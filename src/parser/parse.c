@@ -1,11 +1,11 @@
 #include "minishell.h"
+#include "parse.h"
 // TODO: ekwak
 // 파싱중 에러가 발생하면 함수 내에서 출력하고 끝내야합니다. 
 // 메인 함수에서 에러를 출력하는 함수는 별도로 만들지 않았습니다.
 int	ms_lstadd_back(t_list **lst, void *content)
 {
 	t_list	*new;
-	t_list	*last;
 
 	new = ft_lstnew(content);
 	if (new == NULL)
@@ -122,12 +122,10 @@ static int	word(char *line, t_list **lst, int i, int *err)
 int	line_to_token(char *line, t_list **result)
 {
 	int		err;
-	t_list	*lst;
 	int		i;
 
 	i = 0;
 	err = 0;
-	lst = NULL;
 	while (line[i])
 	{
 		if (line[i] == ' ')

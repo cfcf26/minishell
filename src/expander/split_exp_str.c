@@ -1,4 +1,6 @@
 #include "minishell.h"
+#include "expand.h"
+#include "model.h"
 
 char	*split_str(char *str, int offset, t_exp_data *str_data)
 {

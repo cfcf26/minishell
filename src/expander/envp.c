@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 13:13:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 14:50:23 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/13 17:11:58 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "expand.h"
+#include "model.h"
 
 char	*get_envp_key(char *envp)
 {
