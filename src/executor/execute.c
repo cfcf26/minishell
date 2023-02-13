@@ -1,53 +1,11 @@
 #include "minishell.h"
-
-int	*intdup(int src)
-{
-	int	*dup;
-
-	dup = ft_malloc_guard(sizeof(int));
-	*dup = src;
-	return (dup);
-}
-
-char	*get_env(char *str)
-{
-	const int	size = ft_strlen(str);
-	char		*var;
-	t_list		*envps;
-
-	envps = data()->envp;
-	while (envps)
-	{
-		var = (char *)(envps->content);
-		if (ft_strncmp(var, str, size) == 0 && var[size] == '=')
-			return (ft_substr(var, size + 1, ft_strlen(var) - (size + 1)));
-		envps = envps->next;
-	}
-	return (NULL);
-}
-
-// void	set_env(char *env)
-// {
-// 	if (1/* exist */)
-// 		;// edit
-// 	else if (1/* exist == false */)
-// 		;// add
-// }
-
-char	*join_path(char *p1, char *p2)
-{
-	char	*s1;
-	char	*s2;
-
-	s1 = ft_strjoin(p1, "/");
-	s2 = ft_strjoin(s1, p2);
-	free(s1);
-	return (s2);
-}
+#include "execute.h"
+#include "utils.h"
 
 static int	placeholder(t_list *argv)
 {
 	printf("------ %p ------\n", argv->content);
+	return (0);
 }
 
 static void	*get_builtin_func(char *cmd)
@@ -88,7 +46,7 @@ char	*get_path(char *str)
 	i = -1;
 	while (paths[++i])
 	{
-		s = join_path(paths[i], str);
+		s = concat_str(paths[i], "/", str);
 		if (access(s, AT_EACCESS) == 0)
 			break ;
 		free(s);
@@ -100,74 +58,6 @@ char	*get_path(char *str)
 	if (s == NULL || access(s, AT_EACCESS) != 0)
 		return (ft_strdup(str));
 	return (s);
-}
-
-char	**lst2arr(t_list *lst)
-{
-	const int	size = ft_lstsize(lst);
-	char		**arr;
-	int			i;
-
-	arr = malloc(sizeof(char *) * (size + 1));
-	arr[size] = 0;
-	i = -1;
-	while (++i < size)
-	{
-		arr[i] = ft_strdup(lst->content);
-		if (arr[i] == 0)
-			exit(1);
-		lst = lst->next;
-	}
-	return (arr);
-}
-
-// static void print_exe_test(t_list *lst)
-// {
-// 	t_token	*t;
-
-// 	while (lst)
-// 	{
-// 		t = lst->content;
-// 		if (t->type == PIPE)
-// 			printf("PIPE\n");
-// 		if (t->type == REDIR)
-// 			printf("RED %d %s\n", t->ud.redir_type->redir_type, t->ud.redir_type->file);
-// 		if (t->type == CMD)
-// 			printf("CMD %s\n", t->ud.cmd_type->args[0]);
-// 		lst = lst->next;
-// 	}
-// 	printf("\n");
-// }
-
-static t_list *token_filter(t_list *lst, t_token_type type)
-{
-	t_list	*res;
-	t_list	*node;
-
-	res = NULL;
-	while (lst)
-	{
-		if (((t_token *)(lst->content))->type == type)
-		{
-			node = ft_lstnew(lst->content);
-			if (node == NULL)
-				exit(1); // malloc error
-			ft_lstadd_back(&res, node);
-		}
-		lst = lst->next;
-	}
-	return (res);
-}
-
-static t_token *token_first(t_list *lst, t_token_type type)
-{
-	while (lst)
-	{
-		if (((t_token *)(lst->content))->type == type)
-			return (lst->content);
-		lst = lst->next;
-	}
-	return (NULL);
 }
 
 static int redir(t_list *redir_lst)
@@ -217,12 +107,7 @@ static t_list *exe_expand_all(char **args)
 	return (expandings);
 }
 
-static int	is_empty(t_list *lst)
-{
-	return (ft_lstsize(lst) == 0 || *((char *)(lst->content)) == 0);
-}
-
-static int	is_single_builtin(t_list *use_pipe, t_list *expandings)
+static void	*is_single_builtin(const t_token *use_pipe, t_list *expandings)
 {
 	const int		is_single = use_pipe == NULL && data()->waitpid_lst == NULL;
 
@@ -231,7 +116,7 @@ static int	is_single_builtin(t_list *use_pipe, t_list *expandings)
 	return (get_builtin_func(expandings->content));
 }
 
-static int run_process(int use_pipe, t_list *redir_lst, t_list *expandings)
+static int run_process(const t_token *use_pipe, t_list *redir_lst, t_list *exp)
 {
 	const int	pid = fork();
 
@@ -252,9 +137,9 @@ static int run_process(int use_pipe, t_list *redir_lst, t_list *expandings)
 		}
 		if (redir(redir_lst))
 			exit(1);
-		if (expandings == NULL || expandings->content == '\0')
+		if (exp == NULL || exp->content == NULL)
 			exit(0);
-		if (execve(get_path(expandings->content), lst2arr(expandings), lst2arr(data()->envp)))
+		if (execve(get_path(exp->content), lst2arr(exp), lst2arr(data()->envp)))
 			exit(127);
 	}
 	if (data()->pipe_last_fd != -1)
@@ -262,10 +147,6 @@ static int run_process(int use_pipe, t_list *redir_lst, t_list *expandings)
 		close(data()->pipe_last_fd);
 		data()->pipe_last_fd = -1;
 	}
-	t_list	*node = ft_lstnew(intdup(pid));
-	if (node == NULL)
-		exit(1); // null guard
-	ft_lstadd_back(&(data()->waitpid_lst), node);
 	return (pid);
 }
 
@@ -283,7 +164,7 @@ static int exe(t_list *parsed)
 {
 	const t_token	*use_pipe = token_first(parsed, PIPE);
 	const t_token	*cmd = token_first(parsed, CMD);
-	const t_list	*redirections = token_filter(parsed, REDIR);
+	t_list			*redirections;
 	t_list			*expandings;
 	int				pid;
 
@@ -297,6 +178,7 @@ static int exe(t_list *parsed)
 		pipe(data()->pipe_fd);
 
 
+	redirections = token_filter(parsed, REDIR);
 	if (is_single_builtin(use_pipe, expandings))
 		run_builtin(redirections, expandings);
 	else
@@ -379,9 +261,7 @@ void execute(t_list *parsed_list)
 		waitpid = exe(next);
 		if (waitpid)
 		{
-			waitpid_node = ft_lstnew(intdup(waitpid));
-			if (waitpid_node == NULL)
-				exit(1);
+			waitpid_node = ft_lstnew_guard(intdup(waitpid));
 			ft_lstadd_back(&(data()->waitpid_lst), waitpid_node);
 		}
 		ft_lstclear(&next, NULL);

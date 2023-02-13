@@ -1,82 +1,54 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/11/25 20:46:00 by yonshin           #+#    #+#              #
-#    Updated: 2023/02/13 14:20:30 by yonshin          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = minishell
-ifdef DEBUG
-	CFLAGS = -Wall -Wextra
+.DEFAULT_GOAL = all
+
+SRC_DIR = src
+OBJ_DIR = obj
+LIB_DIR = lib
+CFLAGS = -Wall -Wextra
+ifndef DEBUG
+	CFLAGS += -Werror
 else
-	CFLAGS = -Wall -Wextra -Werror
+	CFLAGS += $(DEBUG)
 endif
+
 LIB = \
-	./lib/libft/libft.a \
+	$(LIB_DIR)/libft/libft.a \
+	$(LIB_DIR)/libstr/libstr.a \
 
 INCLUDE = $(addprefix -I, $(dir $(LIB)))
-LIBDUP = $(notdir $(LIB))
-OBJS = \
-	minishell.o \
-	data.o \
-	execute.o \
-	expand.o \
-	init_signal.o \
-	init_envp.o \
-	parse.o \
-	syntaxer.o \
-	expand_utils.o \
-	split_exp_str.o \
-	remove_quote.o \
-	envp.o \
 
-ifdef WITH_BONUS
-	OBJS = $(BONUS_OBJS)
-endif
+HEADER = $(shell find $(SRC_DIR) -name "*.h" -type f)
+INCLUDE += $(addprefix -I, $(dir $(HEADER)))
+SRC = $(shell find $(SRC_DIR) -name "*.c" -type f)
+OBJ = $(foreach path,$(SRC:.c=.o),$(shell sed "s/^$(SRC_DIR)/$(OBJ_DIR)/g"<<<$(path)))
 
-all: $(NAME) 
+.PHONY: all clean fclean re bonus debug dev test
 
-bonus:
-	make WITH_BONUS=1 all
+all: $(NAME)
 
-$(NAME): $(OBJS) $(LIB)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBDUP) $(DEBUG) $(OUTPUT_OPTION) -lreadline
+$(NAME): $(LIB) $(OBJ)
+	$(CC) $(CFLAGS) $(OUTPUT_OPTION) $(OBJ) $(LIB) -lreadline
 
 $(LIB):
 	make -C $(@D)
-	cp $@ $(@F)
 
-%.o: %.c $(LIB)
-	$(CC) $(CFLAGS) $(OUTPUT_OPTION) $(INCLUDE) $(DEBUG) -c $*.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(OUTPUT_OPTION) $(INCLUDE) $(DEBUG) -c $<
 
 clean:
-	rm -f $(OBJS)
-	rm -f $(BONUS_OBJS)
 	for dir in $(dir $(LIB)); do make -C $$dir clean; done
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
 	for dir in $(dir $(LIB)); do make -C $$dir fclean; done
-	rm -f $(LIBDUP)
+	rm -f $(NAME)
 
-re: 
-	make fclean
+re: fclean
 	make all
-
-dev:
-	if [ -e $(NAME) ]; then make fclean; fi
-	make all
-	./$(NAME)
 
 debug:
 	make DEBUG='-g3 -fsanitize=address'
 
 test: debug
 	./$(NAME)
-
-.PHONY : all clean fclean re bonus debug dev test

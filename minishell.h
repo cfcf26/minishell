@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 15:40:45 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 14:11:37 by yonshin          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -33,8 +22,7 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
-# define MALLOC_ERR 1
-# define SYNTAX_ERR 3
+
 
 typedef enum e_token_type
 {
@@ -96,40 +84,18 @@ typedef struct s_token
 	t_utoken		ud;
 }	t_token;
 
-typedef struct s_exp_data
-{
-	int					len;
-	int					key_len;
-	char				quote;
-	char				*value;
-	char				*key;
-	char				*str;
-}	t_exp_data;
 
-typedef struct s_envp_list
-{
-	int					len;
-	char				*key;
-	char				*value;
-	struct s_envp_list	*next;
-}t_envp_list;
 
 void		init_signal(void);
 void		init_envp(char **envp);
 void		execute(t_list *parsed_list);
-int			parse(char *line, t_list **result);
-t_ms		*data();
-t_envp_list	*set_envp_list(char **envp);
-t_exp_data	reset_exp_data(t_exp_data *node, int flag);
-char		*strs_join(char *str, int offset, t_exp_data *str_data);
-char		*expand_env(char *str, int offset, t_exp_data *str_data, \
-t_envp_list *list);
-char		check_quote(char last_quote, char now_quote);
-char		*exception_dollor(char *str, t_exp_data *str_data);
-t_list		*split_exp_str(char *str, t_exp_data *str_data);
-void		remove_quote(t_list *exp_list, t_exp_data *str_data);
 t_list		*expanding(char *str);
-int			syntaxer(t_list **lst);
+int			parse(char *line, t_list **result);
+
+
+
+
+
 
 typedef struct s_func
 {
