@@ -34,7 +34,7 @@ t_list	*split_exp_str(char *str, t_exp_data *str_data)
 	int		i;
 
 	i = 0;
-	head = ft_lstnew(NULL);
+	head = NULL;
 	*str_data = reset_exp_data(str_data, 0);
 	while (str[i])
 	{

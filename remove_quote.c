@@ -45,7 +45,6 @@ char	*except_quote(char *str, t_exp_data *str_data)
 void	remove_quote(t_list *exp_list, t_exp_data *str_data)
 {
 	*str_data = reset_exp_data(str_data, 0);
-	exp_list = exp_list->next;
 	while (exp_list)
 	{
 		*str_data = reset_exp_data(str_data, 0);
