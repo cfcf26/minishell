@@ -18,6 +18,7 @@
 # include <readline/history.h>
 # include "libft.h"
 # include "model.h"
+# include "utils.h"
 
 void	init_signal(void);
 void	init_envp(char **envp);

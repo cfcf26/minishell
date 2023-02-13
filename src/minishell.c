@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include "utils.h"
 
 int main (int argc, char *argv[], char *envp[])
 {
