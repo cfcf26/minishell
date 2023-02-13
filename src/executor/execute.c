@@ -1,6 +1,7 @@
 #include "minishell.h"
 #include "execute.h"
 #include "utils.h"
+#include "builtin.h"
 
 static int	placeholder(t_list *argv)
 {
@@ -11,13 +12,13 @@ static int	placeholder(t_list *argv)
 static void	*get_builtin_func(char *cmd)
 {
 	static const t_func	built[] = {
-	{"echo", placeholder},
-	{"cd", placeholder},
-	{"pwd", placeholder},
-	{"export", placeholder},
-	{"unset", placeholder},
-	{"env", placeholder},
-	{"exit", placeholder},
+	{"echo", builtin_echo},
+	{"cd", builtin_cd},
+	{"pwd", builtin_pwd},
+	{"export", builtin_export},
+	{"unset", builtin_unset},
+	{"env", builtin_env},
+	{"exit", builtin_exit},
 	{NULL, NULL}
 	};
 	int					i;
