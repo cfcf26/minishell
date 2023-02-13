@@ -6,7 +6,7 @@
 #    By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/13 14:29:59 by yonshin           #+#    #+#              #
-#    Updated: 2023/01/27 22:30:06 by yonshin          ###   ########.fr        #
+#    Updated: 2023/02/10 23:11:44 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ OBJECTS = \
 	ft_atoi.o \
 	ft_bzero.o \
 	ft_calloc.o \
+	ft_calloc_guard.o \
 	ft_itoa.o \
 	ft_memchr.o \
 	ft_memcmp.o \
@@ -51,6 +52,7 @@ OBJECTS = \
 	ft_toupper.o \
 	ft_strupper.o \
 	ft_lstnew.o \
+	ft_lstnew_guard.o \
 	ft_lstadd_front.o \
 	ft_lstsize.o \
 	ft_lstlast.o \

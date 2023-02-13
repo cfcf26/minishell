@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_lstnew_guard.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/12 06:34:09 by yonshin           #+#    #+#             */
-/*   Updated: 2022/11/04 13:58:53 by yonshin          ###   ########.fr       */
+/*   Created: 2022/07/12 06:29:42 by yonshin           #+#    #+#             */
+/*   Updated: 2023/02/10 22:02:07 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
 
-void	ft_lstdelone(t_list *lst, t_action_1 del)
+t_list	*ft_lstnew_guard(void *content)
 {
-	if (lst == 0)
-		return ;
-	if (del)
-		del(lst->content);
-	free(lst);
+	t_list	*node;
+
+	node = ft_malloc_guard(sizeof(t_list));
+	node->content = content;
+	node->next = 0;
+	return (node);
 }
