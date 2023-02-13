@@ -6,7 +6,7 @@
 #    By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/25 20:46:00 by yonshin           #+#    #+#              #
-#    Updated: 2023/02/13 14:12:11 by yonshin          ###   ########.fr        #
+#    Updated: 2023/02/13 14:20:30 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,11 +25,15 @@ OBJS = \
 	minishell.o \
 	data.o \
 	execute.o \
-	expanding.o \
+	expand.o \
 	init_signal.o \
 	init_envp.o \
 	parse.o \
 	syntaxer.o \
+	expand_utils.o \
+	split_exp_str.o \
+	remove_quote.o \
+	envp.o \
 
 ifdef WITH_BONUS
 	OBJS = $(BONUS_OBJS)

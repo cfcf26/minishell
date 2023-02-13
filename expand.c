@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 22:35:16 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/10 17:51:30 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/13 14:15:53 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,37 @@ t_exp_data	expand_variables(char *str, t_exp_data *str_data, t_envp_list *list)
 	return (*str_data);
 }
 
-t_list	*expanding(char *str, char **envp)
+static char	**lst2arr(t_list *lst)
+{
+	const int	size = ft_lstsize(lst);
+	char		**arr;
+	int			i;
+
+	arr = malloc(sizeof(char *) * (size + 1));
+	arr[size] = 0;
+	i = -1;
+	while (++i < size)
+	{
+		arr[i] = ft_strdup(lst->content);
+		if (arr[i] == 0)
+			exit(1);
+		lst = lst->next;
+	}
+	return (arr);
+}
+
+t_list	*expanding(char *str)
 {
 	char		*expanded_str;
 	t_exp_data	str_data;
 	t_envp_list	*envp_list;
 	t_list		*res;
 
+	char **envp = lst2arr(data()->envp);
 	envp_list = set_envp_list(envp);
 	str_data = reset_exp_data(&str_data, 0);
 	str_data = expand_variables(str, &str_data, envp_list);
 	res = split_exp_str(str_data.str, &str_data);
 	remove_quote(res, &str_data);
 	return (res);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	char *str1 = "\"ls\"$a\'\"$a\"\'";
-	char *str2 = "$PATH";
-	char *str3 = "\"$SHELL\"\"$USER\"";
-	char *str4 = "asgjaljg\'$a\'";
-	t_list	*list;
-
-	list = expanding(str1, envp);
 }

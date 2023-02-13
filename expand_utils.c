@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/10 17:53:53 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/02/13 14:17:07 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,6 @@ char	*exception_dollor(char *str, t_exp_data *str_data)
 	free(str_data->str);
 	if (str[0] == '$' && str[1] == '\0')
 		return ("$");
-	else
-		return (ft_itoa(error));
+	// else
+	// 	return (ft_itoa(error));
 }
