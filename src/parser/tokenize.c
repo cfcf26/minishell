@@ -1,6 +1,6 @@
 #include "parse.h"
 
-static int	pipes(char *line, t_list **lst, int i, int *err)
+static int	pipes(char *line, t_list **lst, int i)
 {
 	t_token	*token;
 	int		j;
@@ -15,7 +15,7 @@ static int	pipes(char *line, t_list **lst, int i, int *err)
 	return (j);
 }
 
-static int	redirect(char *line, t_list **lst, int i, int *err)
+static int	redirect(char *line, t_list **lst, int i)
 {
 	t_token	*token;
 	int		j;
@@ -26,8 +26,7 @@ static int	redirect(char *line, t_list **lst, int i, int *err)
 	while (line[j] && line[j] == line[i])
 		j++;
 	token->ud.str = ft_substr_guard(line, i, j - i);
-	else
-		ft_lstadd_back(lst, ft_lstnew_guard(token));
+	ft_lstadd_back(lst, ft_lstnew_guard(token));
 	return (j);
 }
 
@@ -81,9 +80,9 @@ int	line_to_token(char *line, t_list **result)
 		if (line[i] == ' ')
 			i++;
 		else if (line[i] == '|')
-			i = pipes(line, result, i, &err);
+			i = pipes(line, result, i);
 		else if (line[i] == '>' || line[i] == '<')
-			i = redirect(line, result, i, &err);
+			i = redirect(line, result, i);
 		else
 			i = word(line, result, i, &err);
 		if (err != 0)

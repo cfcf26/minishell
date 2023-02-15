@@ -20,6 +20,8 @@
 # include "model.h"
 # include "utils.h"
 
+void	rl_replace_line(const char *s, int clear_undo);
+
 void	init_signal(void);
 void	init_envp(char **envp);
 void	execute(t_list *parsed_list);

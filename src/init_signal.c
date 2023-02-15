@@ -1,7 +1,22 @@
 #include "minishell.h"
 
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+static void	sigquit_handler(int sig)
+{
+	(void)sig;
+	rl_on_new_line();
+	rl_redisplay();
+}
+
 void	init_signal(void)
 {
-	signal(SIGINT, SIG_IGN);  // 컨씨
-	signal(SIGQUIT, SIG_IGN); //컨 역슬레쉬
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, sigquit_handler);
 }

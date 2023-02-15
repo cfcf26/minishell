@@ -38,7 +38,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 }
 
 void	here_doc_fork_signal(int fd, char *limit)
-{//시그널 처리해야함
+{
 	int		pid;
 	char	*buff;
 
