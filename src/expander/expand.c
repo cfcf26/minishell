@@ -6,7 +6,7 @@
 /*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 22:35:16 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 17:14:56 by ekwak            ###   ########.fr       */
+/*   Updated: 2023/02/16 03:38:19 by ekwak            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,6 @@ t_exp_data	expand_variables(char *str, t_exp_data *str_data, t_envp_list *list)
 	if ((str[0] == '$' && str[1] == '\0') || (str[0] == '$' && str[1] == '?'))
 		str_data->str = exception_dollor(str, str_data);
 	return (*str_data);
-}
-
-static char	**lst2arr(t_list *lst)
-{
-	const int	size = ft_lstsize(lst);
-	char		**arr;
-	int			i;
-
-	arr = malloc(sizeof(char *) * (size + 1));
-	arr[size] = 0;
-	i = -1;
-	while (++i < size)
-	{
-		arr[i] = ft_strdup(lst->content);
-		if (arr[i] == 0)
-			exit(1);
-		lst = lst->next;
-	}
-	return (arr);
 }
 
 t_list	*expanding(char *str)

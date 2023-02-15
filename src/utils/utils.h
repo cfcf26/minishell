@@ -16,5 +16,7 @@ void	set_env(char *key, char *value);
 void	unlink_clear();
 void	unlink_add_file(char *str);
 void	ft_putstr_fd_line(char *s, int fd);
-
+char	*ft_strdup_guard(const char *s1);
+char	*ft_substr_guard(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin_guard(char const *s1, char const *s2);
 #endif

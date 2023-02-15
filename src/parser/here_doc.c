@@ -18,18 +18,18 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	char		tmp[2];
 
 	fd = open("/dev/urandom", O_RDONLY);
-	file_name = ft_strdup("/tmp/pipex_tmp");
+	file_name = ft_strdup_guard("/tmp/pipex_tmp");
 	tmp[1] = 0;
 	while (!access(file_name, F_OK))
 	{
 		if (ft_strlen(file_name) > 128)
 		{
 			free(file_name);
-			file_name = ft_strdup("/tmp/pipex_tmp");
+			file_name = ft_strdup_guard("/tmp/pipex_tmp");
 		}
 		read(fd, tmp, 1);
 		tmp[0] = material[(unsigned char)tmp[0] % 62];
-		tmp_name = ft_strjoin(file_name, tmp);
+		tmp_name = ft_strjoin_guard(file_name, tmp);
 		free(file_name);
 		file_name = tmp_name;
 	}
@@ -74,6 +74,6 @@ char	*heredoc(char *limit)
 		printf("infile error!");
 	here_doc_fork_signal(fd, limit);
 	close(fd);
-	ft_lstadd_back(&data()->unlink_lst, ft_lstnew(file_name));
+	ft_lstadd_back(&data()->unlink_lst, ft_lstnew_guard(file_name));
 	return (file_name);
 }

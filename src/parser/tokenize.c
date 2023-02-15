@@ -6,23 +6,12 @@ static int	pipes(char *line, t_list **lst, int i, int *err)
 	int		j;
 
 	j = i;
-	token = (t_token *)malloc(sizeof(t_token));
-	if (token == NULL)
-	{
-		*err = 1;
-		return (i);
-	}
+	token = (t_token *)ft_malloc_guard(sizeof(t_token));
 	while (line[j] && line[j] == '|')
 		j++;
 	token->type = PIPE;
-	token->ud.str = ft_substr(line, i, j - i);
-	if (token->ud.pipe_type == NULL)
-	{
-		*err = 1;
-		free(token);
-	}
-	else
-		ft_lstadd_back(lst, ft_lstnew(token));
+	token->ud.str = ft_substr_guard(line, i, j - i);
+	ft_lstadd_back(lst, ft_lstnew_guard(token));
 	return (j);
 }
 
@@ -32,23 +21,13 @@ static int	redirect(char *line, t_list **lst, int i, int *err)
 	int		j;
 
 	j = i;
-	token = (t_token *)malloc(sizeof(t_token));
-	if (token == NULL)
-	{
-		*err = 1;
-		return (i);
-	}
+	token = (t_token *)ft_malloc_guard(sizeof(t_token));
 	token->type = REDIR;
 	while (line[j] && line[j] == line[i])
 		j++;
-	token->ud.str = ft_substr(line, i, j - i);
-	if (token->ud.str == NULL)
-	{
-		*err = 1;
-		free(token);
-	}
+	token->ud.str = ft_substr_guard(line, i, j - i);
 	else
-		ft_lstadd_back(lst, ft_lstnew(token));
+		ft_lstadd_back(lst, ft_lstnew_guard(token));
 	return (j);
 }
 
@@ -83,7 +62,7 @@ static int	word(char *line, t_list **lst, int i, int *err)
 			return (i);
 		i++;
 	}
-	str = ft_substr(line, j, i - j);
+	str = ft_substr_guard(line, j, i - j);
 	token = create_token(str);
 	if (!add_token(lst, token, err))
 		return (i);
