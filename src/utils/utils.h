@@ -15,5 +15,5 @@ void	set_env(char *key, char *value);
 void	unlink_clear();
 void	unlink_add_file(char *str);
 void	ft_putstr_fd_line(char *s, int fd);
-
+void	tokenclear(void *token);
 #endif

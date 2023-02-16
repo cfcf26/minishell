@@ -30,7 +30,7 @@ static int	redirect(char *line, t_list **lst, int i)
 	return (j);
 }
 
-static int	quote(char *line, int *i, int *err)
+static int	quote(char *line, int *i)
 {
 	int	j;
 
@@ -39,13 +39,13 @@ static int	quote(char *line, int *i, int *err)
 		j++;
 	if (line[j] == '\0')
 	{
-		*err = 1;
+		data()->parse_err = 258;
 		return (j);
 	}
 	return (j);
 }
 
-static int	word(char *line, t_list **lst, int i, int *err)
+static int	word(char *line, t_list **lst, int i)
 {
 	int		j;
 	char	*str;
@@ -56,8 +56,8 @@ static int	word(char *line, t_list **lst, int i, int *err)
 		&& line[i] != '>' && line[i] != '<')
 	{
 		if (line[i] == '\'' || line[i] == '\"')
-			i = quote(line, &i, err);
-		if (*err == 1)
+			i = quote(line, &i);
+		if (data()->parse_err == 258)
 			return (i);
 		i++;
 	}
@@ -67,13 +67,11 @@ static int	word(char *line, t_list **lst, int i, int *err)
 	return (i);
 }
 
-int	line_to_token(char *line, t_list **result)
+void	line_to_token(char *line, t_list **result)
 {
-	int		err;
 	int		i;
 
 	i = 0;
-	err = 0;
 	while (line[i])
 	{
 		if (line[i] == ' ')
@@ -83,9 +81,9 @@ int	line_to_token(char *line, t_list **result)
 		else if (line[i] == '>' || line[i] == '<')
 			i = redirect(line, result, i);
 		else
-			i = word(line, result, i, &err);
-		if (err != 0)
-			break ;
+			i = word(line, result, i);
+		if (data()->parse_err)
+			return ;
 	}
-	return (err);
+	return ;
 }

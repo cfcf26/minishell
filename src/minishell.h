@@ -19,6 +19,8 @@
 # include "libft.h"
 # include "model.h"
 # include "utils.h"
+# include "ft_error.h"
+# include "ft_signal.h"
 
 void	rl_replace_line(const char *s, int clear_undo);
 

@@ -6,6 +6,7 @@
 typedef struct s_ms
 {
 	int		err;
+	int		parse_err;
 	int		pipe_fd[2];
 	int		pipe_last_fd;
 	int		backup_stdio_fd[2];

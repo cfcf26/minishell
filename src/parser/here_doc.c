@@ -42,9 +42,11 @@ void	here_doc_fork_signal(int fd, char *limit)
 	int		pid;
 	char	*buff;
 
+	init_signal_parent();
 	pid = fork();
 	if (pid == 0)
 	{
+		init_signal_here_doc();
 		while (1)
 		{
 			write(1, "pipe heredoc> ", 15);
@@ -57,10 +59,12 @@ void	here_doc_fork_signal(int fd, char *limit)
 			write(fd, buff, ft_strlen(buff));
 			free(buff);
 		}
-		free(buff);
+		if (buff)
+			free(buff);
 		exit(0);
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &data()->parse_err, 0);
+	init_signal();
 }
 
 char	*heredoc(char *limit)
@@ -68,6 +72,8 @@ char	*heredoc(char *limit)
 	char	*file_name;
 	int		fd;
 
+	if (data()->parse_err != 0)
+		return (NULL);
 	file_name = create_random_file();
 	fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)

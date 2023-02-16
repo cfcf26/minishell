@@ -8,23 +8,26 @@ int main (int argc, char *argv[], char *envp[])
 	argc = (int)argc;
 	argv = (char **)argv;
 	ft_memset(data(), 0, sizeof(t_ms));
-	// init_signal();
+	init_signal();
 	init_envp(envp);
 	parsed = NULL;
 	while (1)
 	{
 		line = readline("> ");
+		if (line == NULL)
+			break ;
 		if (line && ft_strncmp(line, "", 1) != 0)
 		{
 			if (parse(line, &parsed) == 0)
 			{
-				execute(parsed);
+				// execute(parsed);
 				unlink_clear();
-				ft_lstclear(&parsed, NULL);
+				ft_lstclear(parsed, tokenclear);
 			}
 			add_history(line);
 		}
 		free(line);
 	}
+	printf("%d exit\n", getpid());
 	return (0);
 }

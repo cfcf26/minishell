@@ -48,7 +48,7 @@ re: fclean
 	make all
 
 debug:
-	make DEBUG='-g3 -fsanitize=address'
+	make DEBUG='-g3'
 
 test: debug
 	./$(NAME)

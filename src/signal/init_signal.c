@@ -1,32 +1,42 @@
-// #include "ft_signal.h"
+#include "ft_signal.h"
 
-// static void	sigint_handler(int sig)
-// {
-// 	(void)sig;
-// 	if (sig == SIGINT)
-// 	{
-// 		write(1, "\n", 1);
-// 		rl_on_new_line();
-// 		rl_replace_line("", 0);
-// 		rl_redisplay();
-// 	}
-// 	else if (sig == SIGQUIT)
-// 	{
-// 		rl_on_new_line();
-// 		rl_redisplay();
-// 	}
-// }
 
-// void	heredoc_sigint(int sig)
-// {
-// 	(void)sig;
-// 	write(1, "\n", 1);
-// 	data()->err = 1;
-// 	exit(1);
-// }
+static void	sigint_handler(int signo)
+{
+	(void)signo;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
 
-// void	init_signal(void)
-// {
-// 	signal(SIGINT, sigint_handler);
-// 	signal(SIGQUIT, sigint_handler);
-// }
+static void	sigint_heredoc_handler(int signo)
+{
+	(void)signo;
+	data()->parse_err = 1;
+	write(2, "\n", 1);
+	exit(1);
+}
+
+void	init_signal(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	init_signal_parent(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	init_signal_here_doc(void)
+{
+	signal(SIGINT, sigint_heredoc_handler);
+}
+
+void	init_signal_child(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
