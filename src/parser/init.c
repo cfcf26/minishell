@@ -1,6 +1,6 @@
 #include "parse.h"
 
-static t_redir_type	init_redir_type(char *str)
+static t_redir_type	int_red_type(char *str)
 {
 	t_redir_type	redir_type;
 	const int		len = ft_strlen(str);
@@ -23,12 +23,30 @@ static t_redir_type	init_redir_type(char *str)
 	return (redir_type);
 }
 
-static t_list	*create_redir_token_list(t_list *tmp)
+static void	red_token_lst_add_back(t_list **redir_lst, t_list *tmp)
 {
-	t_list	*redir_lst;
 	t_token	*redir_token;
 	t_red	*redir;
 	char	*file;
+
+	((t_token *)tmp->content)->type = VISITED;
+	((t_token *)tmp->next->content)->type = VISITED;
+	redir_token = (t_token *)ft_calloc_guard(1, sizeof(t_token));
+	redir_token->type = REDIR;
+	redir = (t_red *)ft_calloc_guard(1, sizeof(t_red));
+	redir->redir_type = int_red_type(((t_token *)tmp->content)->ud.str);
+	if (redir->redir_type == HEREDOC)
+		file = heredoc(((t_token *)tmp->next->content)->ud.str);
+	else
+		file = ft_strdup_guard(((t_token *)tmp->next->content)->ud.str);
+	redir->file = file;
+	redir_token->ud.redir_type = redir;
+	ft_lstadd_back(redir_lst, ft_lstnew_guard(redir_token));
+}
+
+static t_list	*create_redir_token_list(t_list *tmp)
+{
+	t_list	*redir_lst;
 
 	redir_lst = NULL;
 	while (tmp)
@@ -36,21 +54,7 @@ static t_list	*create_redir_token_list(t_list *tmp)
 		if (((t_token *)tmp->content)->type == PIPE)
 			break ;
 		if (((t_token *)tmp->content)->type == REDIR)
-		{
-			((t_token *)tmp->content)->type = VISITED;
-			((t_token *)tmp->next->content)->type = VISITED;
-			redir_token = (t_token *)ft_calloc_guard(1, sizeof(t_token));
-			redir_token->type = REDIR;
-			redir = (t_red *)ft_calloc_guard(1, sizeof(t_red));
-			redir->redir_type = init_redir_type(((t_token *)tmp->content)->ud.str);
-			if (redir->redir_type == HEREDOC)
-				file = heredoc(((t_token *)tmp->next->content)->ud.str);
-			else
-				file = ft_strdup_guard(((t_token *)tmp->next->content)->ud.str);
-			redir->file = file;
-			redir_token->ud.redir_type = redir;
-			ft_lstadd_back(&redir_lst, ft_lstnew_guard(redir_token));
-		}
+			red_token_lst_add_back(&redir_lst, tmp);
 		tmp = tmp->next;
 	}
 	return (redir_lst);
@@ -65,7 +69,6 @@ t_list	*init_redir_lst(t_list **lst)
 	redir_lst = create_redir_token_list(tmp);
 	return (redir_lst);
 }
-
 
 char	**init_args(t_list *lst)
 {
