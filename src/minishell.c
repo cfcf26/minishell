@@ -8,7 +8,7 @@ int main (int argc, char *argv[], char *envp[])
 	argc = (int)argc;
 	argv = (char **)argv;
 	ft_memset(data(), 0, sizeof(t_ms));
-	init_signal();
+	// init_signal();
 	init_envp(envp);
 	parsed = NULL;
 	while (1)
