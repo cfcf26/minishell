@@ -1,6 +1,7 @@
 #include "builtin.h"
+#include "model.h"
 
-int	builtin_echo(t_list *argv)
+int	builtin_env(t_list *argv)
 {
 	(void)argv;
 	return (1);
