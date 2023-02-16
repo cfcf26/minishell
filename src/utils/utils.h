@@ -9,7 +9,6 @@ t_list	*token_filter(t_list *lst, t_token_type type);
 t_token	*token_first(t_list *lst, t_token_type type);
 void	destroy_token(t_token *token);
 t_token	*create_token(char *str);
-int		add_token(t_list **lst, t_token *token, int *err);
 t_token	*to_token(t_list *node);
 char	*get_env(char *key);
 void	set_env(char *key, char *value);

@@ -63,8 +63,7 @@ static int	word(char *line, t_list **lst, int i, int *err)
 	}
 	str = ft_substr_guard(line, j, i - j);
 	token = create_token(str);
-	if (!add_token(lst, token, err))
-		return (i);
+	ft_lstadd_back(lst, ft_lstnew_guard(token));
 	return (i);
 }
 
