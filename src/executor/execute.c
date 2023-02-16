@@ -122,9 +122,12 @@ static int run_process(const t_token *use_pipe, t_list *redir_lst, t_list *exp)
 	const int	pid = fork();
 
 	if (pid == -1)
-		exit(1); // pid error
+		return (pid);
 	if (pid == 0)
 	{
+
+		// TODO: 실행전 시그널 해제
+
 		if (data()->pipe_last_fd != -1)
 		{
 			dup2(data()->pipe_last_fd, STDIN_FILENO);
@@ -185,6 +188,8 @@ static int exe(t_list *parsed)
 	else
 		pid = run_process(use_pipe, redirections, expandings);
 
+	if (pid < 0)
+		; // TODO: fork 실패시 에러 처리 다음 명령은 모두 취소... 로직 어떻게 짜야할지 다시 고민 필요
 
 	if (use_pipe)
 	{
