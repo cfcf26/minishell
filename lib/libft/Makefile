@@ -64,6 +64,9 @@ OBJECTS = \
 	get_next_line.o \
 	get_next_line_utils.o \
 	ft_malloc_guard.o \
+	ft_strjoin_guard.o \
+	ft_substr_guard.o \
+	ft_strdup_guard.o \
 
 $(NAME): $(OBJECTS)
 	ar $(OPTIONS) $@ $^

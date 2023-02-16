@@ -88,5 +88,8 @@ int		ft_toupper(int c);
 char	*get_next_line(int fd);
 char	*get_next_line_recursive(t_test **head, int fd, size_t start, int *err);
 void	*ft_malloc_guard(size_t size);
+char	*ft_strdup_guard(const char *s1);
+char	*ft_substr_guard(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin_guard(char const *s1, char const *s2);
 
 #endif
