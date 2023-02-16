@@ -3,12 +3,6 @@
 #include "utils.h"
 #include "builtin.h"
 
-static int	placeholder(t_list *argv)
-{
-	printf("------ %p ------\n", argv->content);
-	return (0);
-}
-
 static void	*get_builtin_func(char *cmd)
 {
 	static const t_func	built[] = {
@@ -240,8 +234,8 @@ static void reload_stdio_fd()
 
 static void	wait_pipe_processes(t_list *waitpids)
 {
-	char	err;
-	int		pid;
+	int	err;
+	int	pid;
 
 	if (waitpids == NULL)
 		return ;
