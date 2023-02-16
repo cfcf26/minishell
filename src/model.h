@@ -5,12 +5,8 @@
 /******************** core ********************/
 typedef struct s_ms
 {
-<<<<<<< HEAD
 	int		err;
 	int		parse_err;
-=======
-	char	err;
->>>>>>> 735f8ebef127437eab36edfd93848dfe5afc18f5
 	int		pipe_fd[2];
 	int		pipe_last_fd;
 	int		backup_stdio_fd[2];
