@@ -5,6 +5,7 @@ SRC_DIR = src
 OBJ_DIR = obj
 LIB_DIR = lib
 CFLAGS = -Wall -Wextra
+LDFLAGS = -L$(shell brew --prefix readline)/lib
 ifndef DEBUG
 	CFLAGS += -Werror
 else
@@ -26,7 +27,7 @@ OBJ = $(foreach path,$(SRC:.c=.o),$(shell sed "s/^$(SRC_DIR)/$(OBJ_DIR)/g"<<<$(p
 all: $(NAME)
 
 $(NAME): $(LIB) $(OBJ)
-	$(CC) $(CFLAGS) $(OUTPUT_OPTION) $(OBJ) $(LIB) -lreadline
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OUTPUT_OPTION) $(OBJ) $(LIB) -lreadline
 
 $(LIB):
 	make -C $(@D)
