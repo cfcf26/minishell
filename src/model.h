@@ -9,6 +9,7 @@ typedef struct s_ms
 	int		pipe_fd[2];
 	int		pipe_last_fd;
 	int		backup_stdio_fd[2];
+	char	*pwd;
 	t_list	*envp;
 	t_list	*unlink_lst;
 	t_list	*waitpid_lst;
