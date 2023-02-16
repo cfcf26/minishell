@@ -3,62 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ekwak <ekwak@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 16:23:02 by juykang           #+#    #+#             */
-/*   Updated: 2023/02/13 17:14:19 by ekwak            ###   ########.fr       */
+/*   Updated: 2023/02/16 19:32:29 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "expand.h"
 #include "model.h"
-
-int	is_valid_name(char c)
-{
-	const char	*material = "abcdefghijklmnopqrstuvwxyz\
-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-
-	if (c != 0 && ft_strchr(material, c) != NULL)
-		return (1);
-	else
-		return (0);
-}
-
-char	*find_key(char *str, int offset, t_exp_data *str_data)
-{
-	int		i;
-	char	*key;
-
-	if (str[offset + 1] >= '0' && str[offset + 1] <= '9')
-		return (&(str[offset + 1]));
-	i = 0;
-	while (is_valid_name(str[offset + 1 + i]))
-		i++;
-	key = ft_substr(str, offset + 1, i);
-	str_data->key_len = i + 1;
-	return (key);
-}
-
-char	*expand_env(char *str, int offset, t_exp_data *str_data, \
-t_envp_list *list)
-{
-	//t_ms	*ms;
-
-	//ms = data();
-	str_data->key = find_key(str, offset, str_data);
-	while (list->key)
-	{
-		if (ft_strnstr(str_data->key, list->key, ft_strlen(str_data->key)))
-		{
-			free(str_data->key);
-			return (list->value);
-		}
-		list = list->next;
-	}
-	free(str_data->key);
-	return (NULL);
-}
 
 char	*strs_join(char *str, int offset, t_exp_data *str_data)
 {
