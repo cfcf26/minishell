@@ -6,9 +6,7 @@ void	init_envp(char **envp)
 
 	while (envp[0])
 	{
-		node = ft_lstnew(*envp);
-		if (node == NULL)
-			exit(1); // null guard
+		node = ft_lstnew_guard(ft_strdup(*envp));
 		ft_lstadd_back(&(data()->envp), node);
 		envp++;
 	}

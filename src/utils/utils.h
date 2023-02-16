@@ -2,6 +2,9 @@
 # define UTILS_H
 # include "model.h"
 
+# define ENV_CHARSET "abcdefghijklmnopqrstuvwxyz\
+ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+
 int		*intdup(int src);
 char	*concat_str(const char *p1, const char *str, const char *p2);
 char	**lst2arr(t_list *lst);

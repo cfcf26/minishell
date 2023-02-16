@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+         #
+#    By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/13 14:29:59 by yonshin           #+#    #+#              #
-#    Updated: 2023/02/10 23:11:44 by yonshin          ###   ########.fr        #
+#    Updated: 2023/02/16 22:46:57 by yonshin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,7 @@ OBJECTS = \
 	ft_strjoin_guard.o \
 	ft_substr_guard.o \
 	ft_strdup_guard.o \
+	ft_iscontain.o \
 
 $(NAME): $(OBJECTS)
 	ar $(OPTIONS) $@ $^

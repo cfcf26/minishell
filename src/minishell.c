@@ -8,7 +8,12 @@ int main (int argc, char *argv[], char *envp[])
 	argc = (int)argc;
 	argv = (char **)argv;
 	ft_memset(data(), 0, sizeof(t_ms));
+<<<<<<< HEAD
 	init_signal();
+=======
+	data()->pwd = getcwd(NULL, 0);
+	// init_signal();
+>>>>>>> 735f8ebef127437eab36edfd93848dfe5afc18f5
 	init_envp(envp);
 	parsed = NULL;
 	while (1)

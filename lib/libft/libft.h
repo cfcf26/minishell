@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 13:52:51 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/10 22:04:40 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/16 22:46:46 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,6 @@ void	*ft_malloc_guard(size_t size);
 char	*ft_strdup_guard(const char *s1);
 char	*ft_substr_guard(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin_guard(char const *s1, char const *s2);
+int		ft_iscontain(char *all, char *str);
 
 #endif
