@@ -240,8 +240,8 @@ static void reload_stdio_fd()
 
 static void	wait_pipe_processes(t_list *waitpids)
 {
-	int	err;
-	int	pid;
+	char	err;
+	int		pid;
 
 	if (waitpids == NULL)
 		return ;

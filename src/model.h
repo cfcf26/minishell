@@ -5,7 +5,7 @@
 /******************** core ********************/
 typedef struct s_ms
 {
-	int		err;
+	char	err;
 	int		pipe_fd[2];
 	int		pipe_last_fd;
 	int		backup_stdio_fd[2];
