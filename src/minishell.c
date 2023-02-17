@@ -24,7 +24,7 @@ int main (int argc, char *argv[], char *envp[])
 			{
 				// execute(parsed);
 				unlink_clear();
-				ft_lstclear(parsed, tokenclear);
+				ft_lstclear(&parsed, tokenclear);
 			}
 			add_history(line);
 		}

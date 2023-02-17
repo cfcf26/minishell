@@ -6,7 +6,7 @@ static int	pipes(char *line, t_list **lst, int i)
 	int		j;
 
 	j = i;
-	token = (t_token *)ft_malloc_guard(sizeof(t_token));
+	token = (t_token *)ft_calloc_guard(sizeof(t_token), 1);
 	while (line[j] && line[j] == '|')
 		j++;
 	token->type = PIPE;
