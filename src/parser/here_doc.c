@@ -80,6 +80,6 @@ char	*heredoc(char *limit)
 		printf("infile error!");
 	here_doc_fork_signal(fd, limit);
 	close(fd);
-	ft_lstadd_back(&data()->unlink_lst, ft_lstnew_guard(file_name));
+	ft_lstadd_back(&data()->unlink_lst, ft_lstnew_guard(ft_strdup_guard(file_name)));
 	return (file_name);
 }
