@@ -1,6 +1,5 @@
 #include "ft_signal.h"
 
-
 static void	sigint_handler(int signo)
 {
 	(void)signo;
@@ -33,6 +32,7 @@ void	init_signal_parent(void)
 void	init_signal_here_doc(void)
 {
 	signal(SIGINT, sigint_heredoc_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	init_signal_child(void)

@@ -1,4 +1,5 @@
 #include "parse.h"
+#include "ft_error.h"
 
 int	parse(char *line, t_list **result)
 {
@@ -17,6 +18,7 @@ int	parse(char *line, t_list **result)
 		{
 			ft_lstclear(result, tokenclear);
 			data()->err = data()->parse_err;
+			ft_perror();
 			return (data()->parse_err);
 		}
 	}
