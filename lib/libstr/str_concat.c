@@ -1,6 +1,6 @@
 #include "libft.h"
 
-char	*concat_str(const char *p1, const char *str, const char *p2)
+char	*str_concat(const char *p1, const char *str, const char *p2)
 {
 	char	*s1;
 	char	*s2;

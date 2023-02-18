@@ -2,6 +2,8 @@
 #include "execute.h"
 #include "utils.h"
 #include "builtin.h"
+#include "libstr.h"
+#include "libft.h"
 
 static void	*get_builtin_func(char *cmd)
 {
@@ -41,7 +43,7 @@ char	*get_path(char *str)
 	i = -1;
 	while (paths[++i])
 	{
-		s = concat_str(paths[i], "/", str);
+		s = str_concat(paths[i], "/", str);
 		if (access(s, AT_EACCESS) == 0)
 			break ;
 		free(s);

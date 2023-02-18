@@ -80,5 +80,7 @@ char	*ft_strdup_guard(const char *s1);
 char	*ft_substr_guard(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin_guard(char const *s1, char const *s2);
 int		ft_iscontain(char *all, char *str);
+int		*intdup(int src);
+void	ft_putstr_fd_line(char *s, int fd);
 
 #endif

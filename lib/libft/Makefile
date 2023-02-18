@@ -56,6 +56,8 @@ OBJECTS = \
 	ft_substr_guard.o \
 	ft_strdup_guard.o \
 	ft_iscontain.o \
+	intdup.o \
+	ft_putstr_fd_line.o \
 
 $(NAME): $(OBJECTS)
 	ar $(OPTIONS) $@ $^

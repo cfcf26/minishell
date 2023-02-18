@@ -1,5 +1,6 @@
 #include "model.h"
 #include "utils.h"
+#include "libstr.h"
 
 t_list	*get_env_node(char *key)
 {
@@ -52,12 +53,12 @@ void	set_env(char *key, char *value)
 		ft_lstdel_node(&(data()->envp), env, free);
 	else if (value != NULL && env == NULL)
 	{
-		env = ft_lstnew_guard(concat_str(key, "=", value));
+		env = ft_lstnew_guard(str_concat(key, "=", value));
 		ft_lstadd_front(&(data()->envp), env);
 	}
 	else if (value != NULL && env != NULL)
 	{
 		free(env->content);
-		env->content = concat_str(key, "=", value);
+		env->content = str_concat(key, "=", value);
 	}
 }

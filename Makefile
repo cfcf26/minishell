@@ -14,6 +14,7 @@ endif
 
 LIB = \
 	$(LIB_DIR)/libft/libft.a \
+	$(LIB_DIR)/libstr/libstr.a \
 
 INCLUDE = $(addprefix -I, $(dir $(LIB)))
 
