@@ -22,7 +22,7 @@ int main (int argc, char *argv[], char *envp[])
 		{
 			if (parse(line, &parsed) == 0)
 			{
-				// execute(parsed);
+				execute(parsed);
 				unlink_clear();
 				ft_lstclear(&parsed, tokenclear);
 			}

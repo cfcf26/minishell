@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/08 13:52:51 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/16 22:46:46 by yonshin          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef LIBFT_H
 # define LIBFT_H
 # define FT_SUCCESS 0
@@ -92,5 +80,7 @@ char	*ft_strdup_guard(const char *s1);
 char	*ft_substr_guard(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin_guard(char const *s1, char const *s2);
 int		ft_iscontain(char *all, char *str);
+int		*intdup(int src);
+void	ft_putstr_fd_line(char *s, int fd);
 
 #endif

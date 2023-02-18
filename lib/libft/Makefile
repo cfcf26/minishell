@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/08/13 14:29:59 by yonshin           #+#    #+#              #
-#    Updated: 2023/02/16 22:46:57 by yonshin          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 OPTIONS = rc
 NAME = libft.a
 CFLAGS = -Wall -Wextra -Werror $(DEBUG)
@@ -68,6 +56,8 @@ OBJECTS = \
 	ft_substr_guard.o \
 	ft_strdup_guard.o \
 	ft_iscontain.o \
+	intdup.o \
+	ft_putstr_fd_line.o \
 
 $(NAME): $(OBJECTS)
 	ar $(OPTIONS) $@ $^
