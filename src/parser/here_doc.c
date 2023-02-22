@@ -37,10 +37,10 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	return (file_name);
 }
 
-void	here_doc_fork_signal(int fd, char *limit)
+void	here_doc_fork_signal(int fd, char *l)
 {
 	int		pid;
-	char	*buff;
+	char	*b;
 
 	init_signal_parent();
 	pid = fork();
@@ -50,17 +50,16 @@ void	here_doc_fork_signal(int fd, char *limit)
 		while (1)
 		{
 			write(1, "pipe heredoc> ", 15);
-			buff = get_next_line(0);
-			if (!buff)
+			b = get_next_line(0);
+			if (!b)
 				break ;
-			if (ft_strncmp(buff, limit, ft_max(ft_strlen(buff) - 1, \
-			ft_strlen(limit))) == 0)
+			if (ft_strncmp(b, l, ft_max(ft_strlen(b) - 1, ft_strlen(l))) == 0)
 				break ;
-			write(fd, buff, ft_strlen(buff));
-			free(buff);
+			write(fd, b, ft_strlen(b));
+			free(b);
 		}
-		if (buff)
-			free(buff);
+		if (b)
+			free(b);
 		exit(0);
 	}
 	waitpid(pid, &data()->parse_err, 0);
@@ -80,6 +79,7 @@ char	*heredoc(char *limit)
 		printf("infile error!");
 	here_doc_fork_signal(fd, limit);
 	close(fd);
-	ft_lstadd_back(&data()->unlink_lst, ft_lstnew_guard(file_name));
+	ft_lstadd_back(&data()->unlink_lst, \
+	ft_lstnew_guard(ft_strdup_guard(file_name)));
 	return (file_name);
 }

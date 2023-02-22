@@ -1,6 +1,6 @@
 #include "ft_error.h"
 
-char	*get_error_message(int errnum)
+static char	*get_error_message(int errnum)
 {
 	if (errnum == ESYNTAX)
 		return ("Operation not permitted");

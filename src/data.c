@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_ms	*data()
+t_ms	*data(void)
 {
 	static t_ms	*ms;
 

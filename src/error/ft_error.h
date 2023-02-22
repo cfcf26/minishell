@@ -10,5 +10,4 @@ typedef enum e_errno
 }	t_errno;
 
 void	ft_perror(void);
-
 #endif

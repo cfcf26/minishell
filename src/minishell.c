@@ -10,7 +10,6 @@ int main (int argc, char *argv[], char *envp[])
 	ft_memset(data(), 0, sizeof(t_ms));
 	init_signal();
 	data()->pwd = getcwd(NULL, 0);
-	// init_signal();
 	init_envp(envp);
 	parsed = NULL;
 	while (1)
@@ -22,7 +21,7 @@ int main (int argc, char *argv[], char *envp[])
 		{
 			if (parse(line, &parsed) == 0)
 			{
-				// execute(parsed);
+				execute(parsed);
 				unlink_clear();
 				ft_lstclear(&parsed, tokenclear);
 			}
