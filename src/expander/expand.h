@@ -1,7 +1,6 @@
 #ifndef EXPAND_H
 # define EXPAND_H
 # include "libft.h"
-# include "envp.h"
 
 typedef struct s_exp_data
 {

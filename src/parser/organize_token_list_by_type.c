@@ -1,4 +1,5 @@
 #include "parse.h"
+#include "utils.h"
 
 int	organize_token_list_by_type(t_list **lst)
 {
@@ -17,7 +18,7 @@ int	organize_token_list_by_type(t_list **lst)
 			ft_lstadd_back(&new_lst, init_pipe(&tmp));
 		tmp = tmp->next;
 	}
-	ft_lstclear(lst, tokenclear);
+	ft_lstclear(lst, (t_action_1)destroy_token);
 	*lst = new_lst;
 	return (0);
 }

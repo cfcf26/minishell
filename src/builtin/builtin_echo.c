@@ -1,25 +1,49 @@
 #include <stdio.h>
 #include "builtin.h"
 
+static void	print(t_list *argv)
+{
+	while (argv)
+	{
+		if (argv->next)
+			printf("%s ", argv->content);
+		else
+			printf("%s", argv->content);
+		argv = argv->next;
+	}
+}
+
+static int	is_nextline(t_list **argv)
+{
+	int		nextline;
+	char	*options;
+
+	nextline = 1;
+	if (*argv == NULL)
+		return (nextline);
+	options = (*argv)->content;
+	if (*options++ != '-')
+		return (nextline);
+	while (*options)
+	{
+		if (*options != 'n')
+			return (1);
+		else
+			nextline = 0;
+		options++;
+	}
+	(*argv) = (*argv)->next;
+	is_nextline(argv);
+	return (nextline);
+}
+
 int	builtin_echo(t_list *argv)
 {
 	int	nextline;
 
 	argv = argv->next;
-	nextline = 1;
-	if (argv)
-	{
-		if (ft_strncmp("-n", argv->content, 3) == 0)
-			nextline = 0;
-		else
-			printf("%s", argv->content);
-		argv = argv->next;
-	}
-	while (argv)
-	{
-		printf(" %s", argv->content);
-		argv = argv->next;
-	}
+	nextline = is_nextline(&argv);
+	print(argv);
 	if (nextline)
 		printf("\n");
 	return (0);

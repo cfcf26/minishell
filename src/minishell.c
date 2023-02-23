@@ -22,9 +22,9 @@ int main (int argc, char *argv[], char *envp[])
 			if (parse(line, &parsed) == 0)
 			{
 				execute(parsed);
-				unlink_clear();
-				ft_lstclear(&parsed, tokenclear);
+				ft_lstclear(&parsed, (t_action_1)destroy_token);
 			}
+			unlink_clear();
 			add_history(line);
 		}
 		free(line);

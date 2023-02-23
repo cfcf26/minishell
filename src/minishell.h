@@ -1,5 +1,7 @@
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
+# define MINISHELL "minishell"
+# define MINISHELL_CONSOLE "minishell> "
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -19,14 +21,13 @@
 # include "libft.h"
 # include "model.h"
 # include "utils.h"
-# include "ft_error.h"
+# include "error.h"
 # include "ft_signal.h"
 
 void	rl_replace_line(const char *s, int clear_undo);
 
-void	init_signal(void);
 void	init_envp(char **envp);
-void	execute(t_list *parsed_list);
+int		execute(t_list *parsed_list);
 t_list	*expanding(char *str);
 int		parse(char *line, t_list **result);
 

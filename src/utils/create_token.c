@@ -1,11 +1,16 @@
 #include "utils.h"
 
-t_token	*create_token(char *str)
+t_token	*create_token(t_token_type type)
 {
 	t_token	*token;
 
-	token = (t_token *)ft_calloc_guard(sizeof(t_token), 1);
-	token->type = WORD;
-	token->ud.str = str;
+	token = ft_calloc_guard(1, sizeof(t_token));
+	token->type = type;
+	if (type == CMD)
+		token->ud.cmd_type = ft_calloc_guard(1, sizeof(t_cmd));
+	if (type == REDIR)
+		token->ud.redir_type = ft_calloc_guard(1, sizeof(t_red));
+	if (type == PIPE)
+		token->ud.pipe_type = ft_calloc_guard(1, sizeof(t_pip));
 	return (token);
 }

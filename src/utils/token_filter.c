@@ -10,9 +10,7 @@ t_list	*token_filter(t_list *lst, t_token_type type)
 	{
 		if (((t_token *)(lst->content))->type == type)
 		{
-			node = ft_lstnew(lst->content);
-			if (node == NULL)
-				exit(1); // malloc error
+			node = ft_lstnew_guard(lst->content);
 			ft_lstadd_back(&res, node);
 		}
 		lst = lst->next;
