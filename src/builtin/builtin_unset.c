@@ -16,6 +16,7 @@ int	builtin_unset(t_list *argv)
 		{
 			err = 1;
 			print_err("unset", key, "not a valid identifier", 1);
+			argv = argv->next;
 			continue ;
 		}
 		set_env(key, NULL);
