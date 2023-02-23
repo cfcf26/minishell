@@ -31,11 +31,11 @@ static void	run_child(int use_pipe, t_list *red_lst, t_list *exp)
 		if (reopen(data()->pipe_fd[PIPE_WRITE], STDOUT_FILENO))
 			exit(errno);
 	}
+	if (redir(red_lst))
+		exit(errno);
 	builtin_cmd = get_builtin_func(exp->content);
 	if (builtin_cmd != NULL)
 		exit(builtin_cmd(exp));
-	if (redir(red_lst))
-		exit(errno);
 	if (ft_strchr(exp->content, '/'))
 		path = get_accessible_path(exp->content);
 	else
