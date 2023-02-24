@@ -1,56 +1,61 @@
-#include "minishell.h"
-#include "expand.h"
-#include "model.h"
+#include "libft.h"
+#include "libstr.h"
 
-void	in_quote(char *str, int offset, t_exp_data *str_data)
+static char	*cpy_without_quote(char *str, int len)
 {
-	str_data->str = strs_join(str, offset, str_data);
-	*str_data = reset_exp_data(str_data, 1);
-}
-
-void	without_quote(char *str, int offset, t_exp_data *str_data)
-{
-	str_data->quote = check_quote(str_data->quote, str[offset]);
-	str_data->str = strs_join(str, offset, str_data);
-	*str_data = reset_exp_data(str_data, 1);
-}
-
-char	*except_quote(char *str, t_exp_data *str_data)
-{
+	int		size;
 	int		i;
+	char	*res;
 
 	i = -1;
-	while (str[++i])
-	{
-		if (str_data->quote == '\'' || str_data->quote == '\"')
-		{
-			if (str[i] == '\'' || str[i] == '\"')
-				str_data->quote = check_quote(str_data->quote, str[i]);
-			if (str_data->quote == '0')
-				in_quote(str, i, str_data);
-			else
-				str_data->len++;
-		}
-		else
-		{
-			if (str_data->quote == '0' && (str[i] == '\'' || str[i] == '\"'))
-				without_quote(str, i, str_data);
-			else
-				str_data->len++;
-		}
-	}
-	if (str_data->len > 1)
-		str_data->str = strs_join(str, i, str_data);
-	return (str_data->str);
+	size = 0;
+	while (++i < len)
+		if (ft_strchr("'\"", str[i]) == 0)
+			size++;
+	res = ft_malloc_guard(size + 1);
+	res[size] = 0;
+	i = -1;
+	size = 0;
+	while (++i < len)
+		if (ft_strchr("'\"", str[i]) == 0)
+			res[size++] = str[i];
+	return (res);
 }
 
-void	remove_quote(t_list *exp_list, t_exp_data *str_data)
+static char	*next(char **str)
 {
-	*str_data = reset_exp_data(str_data, 0);
-	while (exp_list)
+	char	quote;
+	int		len;
+	char	*res;
+
+	while (**str == ' ')
+		(*str)++;
+	if (**str == 0)
+		return (NULL);
+	len = -1;
+	while ((*str)[++len] && (quote != 0 || (*str)[len] != ' '))
 	{
-		*str_data = reset_exp_data(str_data, 0);
-		exp_list->content = except_quote(exp_list->content, str_data);
-		exp_list = exp_list->next;
+		if ((*str)[len] == quote)
+			quote = 0;
+		else if ((*str)[len] == '\'' || (*str)[len] == '"')
+			quote = (*str)[len];
 	}
+	res = cpy_without_quote(*str, len);
+	(*str) += len;
+	return (res);
+}
+
+t_list	*remove_quote(char *str)
+{
+	t_list	*res;
+	char	*tmp;
+
+	res = NULL;
+	while (*str)
+	{
+		tmp = next(&str);
+		if (tmp)
+			ft_lstadd_back(&res, ft_lstnew_guard(tmp));
+	}
+	return (res);
 }
