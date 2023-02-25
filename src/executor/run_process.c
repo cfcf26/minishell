@@ -16,6 +16,13 @@ static void	close_pipe_last_fd(void)
 	}
 }
 
+static char	*get_accessible(t_list *exp)
+{
+	if (ft_strchr(exp->content, '/'))
+		return (get_accessible_path(exp->content));
+	return (get_accessible_file(exp->content));
+}
+
 static void	run_child(int use_pipe, t_list *red_lst, t_list *exp)
 {
 	char	*path;
@@ -33,13 +40,12 @@ static void	run_child(int use_pipe, t_list *red_lst, t_list *exp)
 	}
 	if (redir(red_lst))
 		exit(errno);
+	if (exp == NULL)
+		exit(0);
 	builtin_cmd = get_builtin_func(exp->content);
 	if (builtin_cmd != NULL)
 		exit(builtin_cmd(exp));
-	if (ft_strchr(exp->content, '/'))
-		path = get_accessible_path(exp->content);
-	else
-		path = get_accessible_file(exp->content);
+	path = get_accessible(exp);
 	if (execve(path, lst2arr(exp), lst2arr(data()->envp)))
 		exit(print_err(exp->content, NULL, NULL, errno));
 }
