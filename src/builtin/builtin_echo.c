@@ -6,9 +6,9 @@ static void	print(t_list *argv)
 	while (argv)
 	{
 		if (argv->next)
-			printf("%s ", argv->content);
+			printf("%s ", (char *)argv->content);
 		else
-			printf("%s", argv->content);
+			printf("%s", (char *)argv->content);
 		argv = argv->next;
 	}
 }

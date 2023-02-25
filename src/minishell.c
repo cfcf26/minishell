@@ -11,6 +11,7 @@ int main (int argc, char *argv[], char *envp[])
 	init_signal();
 	data()->pwd = getcwd(NULL, 0);
 	init_envp(envp);
+	init_rl_catch_signals();
 	parsed = NULL;
 	while (1)
 	{

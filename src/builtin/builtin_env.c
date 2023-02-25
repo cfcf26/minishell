@@ -10,7 +10,7 @@ int	builtin_env(t_list *argv)
 	lst = data()->envp;
 	while (lst)
 	{
-		printf("%s\n", lst->content);
+		printf("%s\n", (char *)lst->content);
 		lst = lst->next;
 	}
 	return (0);

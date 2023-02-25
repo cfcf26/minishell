@@ -24,7 +24,7 @@ static int	print_variables(void)
 	lst = data()->envp;
 	while (lst)
 	{
-		printf("declare -x %s\n", lst->content);
+		printf("declare -x %s\n", (char *)lst->content);
 		lst = lst->next;
 	}
 	return (0);

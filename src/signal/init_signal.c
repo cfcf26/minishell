@@ -1,20 +1,10 @@
 #include "ft_signal.h"
 
-static void	sigint_handler(int signo)
+void	init_rl_catch_signals(void)
 {
-	(void)signo;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+	extern int	rl_catch_signals;
 
-static void	sigint_heredoc_handler(int signo)
-{
-	(void)signo;
-	data()->parse_err = 1;
-	write(2, "\n", 1);
-	exit(1);
+	rl_catch_signals = 0;
 }
 
 void	init_signal(void)
@@ -32,7 +22,7 @@ void	init_signal_parent(void)
 void	init_signal_here_doc(void)
 {
 	signal(SIGINT, sigint_heredoc_handler);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, sigint_heredoc_handler);
 }
 
 void	init_signal_child(void)

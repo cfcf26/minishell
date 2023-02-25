@@ -40,6 +40,7 @@ static int	quote(char *line, int *i)
 	if (line[j] == '\0')
 	{
 		data()->parse_err = 258;
+		print_err(NULL, NULL, "syntax error", 258);
 		return (j);
 	}
 	return (j);

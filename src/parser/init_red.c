@@ -39,7 +39,10 @@ static void	red_token_lst_add_back(t_list **redir_lst, t_list *tmp)
 	{
 		file = heredoc(((t_token *)tmp->next->content)->ud.str);
 		if (file == NULL)
+		{
 			data()->parse_err = EINTR;
+			set_err(1);
+		}
 	}
 	else
 		file = ft_strdup_guard(((t_token *)tmp->next->content)->ud.str);

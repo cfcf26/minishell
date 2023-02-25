@@ -9,8 +9,6 @@ int	parse(char *line, t_list **result)
 	if (data()->parse_err)
 	{
 		ft_lstclear(result, (t_action_1)destroy_token);
-		data()->err = data()->parse_err;
-		// TODO: error
 		return (data()->parse_err);
 	}
 	else
@@ -19,8 +17,7 @@ int	parse(char *line, t_list **result)
 		if (data()->parse_err)
 		{
 			ft_lstclear(result, (t_action_1)destroy_token);
-			data()->err = data()->parse_err;
-			// TODO: error
+			set_err(data()->parse_err);
 			return (data()->parse_err);
 		}
 	}
