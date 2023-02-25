@@ -30,6 +30,6 @@ int main (int argc, char *argv[], char *envp[])
 		}
 		free(line);
 	}
-	printf("%d exit\n", getpid());
+	printf("exit\n");
 	return (0);
 }
