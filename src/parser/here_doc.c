@@ -79,6 +79,11 @@ char	*heredoc(char *limit)
 		printf("infile error!");
 	here_doc_fork_signal(fd, limit);
 	close(fd);
+	if (data()->parse_err != 0)
+	{
+		free(file_name);
+		return (NULL);
+	}
 	ft_lstadd_back(&data()->unlink_lst, \
 	ft_lstnew_guard(ft_strdup_guard(file_name)));
 	return (file_name);
