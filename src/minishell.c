@@ -6,7 +6,7 @@
 /*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 00:37:25 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/26 00:37:27 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/26 01:10:38 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int main (int argc, char *argv[], char *envp[])
 	parsed = NULL;
 	while (1)
 	{
-		line = readline("> ");
+		line = readline(MINISHELL_CONSOLE);
 		if (line == NULL)
 			break ;
 		if (line && ft_strncmp(line, "", 1) != 0)
