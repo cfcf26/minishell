@@ -61,7 +61,10 @@ static t_list	*create_redir_token_list(t_list *tmp)
 		if (((t_token *)tmp->content)->type == REDIR)
 			red_token_lst_add_back(&redir_lst, tmp);
 		if (data()->parse_err)
+		{
+			ft_lstclear(&redir_lst, (t_action_1)destroy_token);
 			return (NULL);
+		}
 		tmp = tmp->next;
 	}
 	return (redir_lst);

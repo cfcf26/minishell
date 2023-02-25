@@ -79,8 +79,9 @@ char	*heredoc(char *limit)
 		printf("infile error!");
 	here_doc_fork_signal(fd, limit);
 	close(fd);
-	if (data()->parse_err != 0)
+	if (data()->parse_err)
 	{
+		unlink(file_name);
 		free(file_name);
 		return (NULL);
 	}
