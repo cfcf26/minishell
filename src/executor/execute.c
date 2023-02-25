@@ -6,7 +6,7 @@
 /*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 00:39:06 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/26 00:39:07 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/26 01:09:33 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "libstr.h"
 #include "libft.h"
 #include "error.h"
+#include "ft_signal.h"
 
 static int	wait_pipe_processes(t_list *waitpids)
 {

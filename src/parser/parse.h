@@ -6,12 +6,15 @@
 /*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 00:38:34 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/26 00:38:35 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/26 01:07:08 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_H
 # define PARSE_H
+# include <fcntl.h>
+# include "utils.h"
+# include "ft_signal.h"
 # include "libft.h"
 # include "model.h"
 # include "minishell.h"

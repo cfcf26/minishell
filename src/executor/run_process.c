@@ -6,7 +6,7 @@
 /*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 00:38:52 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/26 00:38:53 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/26 01:06:53 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "errno.h"
 #include "libstr.h"
 #include "builtin.h"
+#include "ft_signal.h"
 
 static void	close_pipe_last_fd(void)
 {
