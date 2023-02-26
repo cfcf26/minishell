@@ -26,12 +26,12 @@ static char	*exception_case(char **str)
 	if (**str == '?')
 	{
 		(*str)++;
-		return ft_itoa(data()->err);
+		return (ft_itoa(data()->err));
 	}
 	if (**str == '$')
 	{
 		(*str)++;
-		return ft_strdup("<processID>");
+		return (ft_strdup("<processID>"));
 	}
 	return (NULL);
 }

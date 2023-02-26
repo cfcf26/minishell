@@ -16,7 +16,7 @@ void	strb_clear(t_strb *b)
 {
 	t_list		*lst;
 	t_strb_item	*item;
-	
+
 	b->len = 0;
 	lst = b->lst;
 	while (lst)

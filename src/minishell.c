@@ -19,9 +19,9 @@ int main (int argc, char *argv[], char *envp[])
 
 	argc = (int)argc;
 	argv = (char **)argv;
-	ft_memset(data(), 0, sizeof(t_ms));
+	ft_memset(data(), 0, sizeof(t_ms)); //이미 data()함수에서 memset으로 초기화 하고 리턴하기 때문에 초기화 해줄 필요 없음
 	init_signal();
-	data()->pwd = getcwd(NULL, 0);
+	data()->pwd = getcwd(NULL, 0); // 한 라인에 두개의 함수가 있어서 생기는 놈 오류로 나누어야함
 	init_envp(envp);
 	init_rl_catch_signals();
 	parsed = NULL;
