@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: yonshin <yonshin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 00:37:20 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/26 01:09:27 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/27 10:49:51 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <readline/history.h>
 # include "utils.h"
 # include "ft_signal.h"
-# define MINISHELL "minishell"
-# define MINISHELL_CONSOLE "minishell> "
+# define MINISHELL "sushihouse"
+# define MINISHELL_CONSOLE "sushihouse> "
 
 void	rl_replace_line(const char *s, int clear_undo);
 
