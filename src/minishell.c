@@ -26,6 +26,15 @@ static void	init(int argc, char **argv, char **envp)
 	init_rl_catch_signals();
 }
 
+static int	check_no_empty_line(char *line)
+{
+	while (*line && (*line == ' ' || *line == '\t'))
+		line++;
+	if (*line == '\0')
+		return (0);
+	return (1);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
@@ -38,7 +47,7 @@ int	main(int argc, char *argv[], char *envp[])
 		line = readline(MINISHELL_CONSOLE);
 		if (line == NULL)
 			break ;
-		if (line && ft_strncmp(line, "", 1) != 0)
+		if (line && check_no_empty_line(line))
 		{
 			if (parse(line, &parsed) == 0)
 			{
