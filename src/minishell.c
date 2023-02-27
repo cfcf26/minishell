@@ -14,7 +14,11 @@
 
 static void	init(int argc, char **argv, char **envp)
 {
-	(void)argc;
+	if (argc != 1)
+	{
+		ft_putstr_fd("not supported\n", STDERR_FILENO);
+		exit(1);
+	}
 	(void)argv;
 	data();
 	init_signal();
