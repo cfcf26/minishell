@@ -36,6 +36,8 @@ static int	is_nextline(t_list **argv)
 	options = (*argv)->content;
 	if (*options++ != '-')
 		return (nextline);
+	if (*options == '\0')
+		return (nextline);
 	while (*options)
 	{
 		if (*options != 'n')
