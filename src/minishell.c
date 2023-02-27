@@ -6,24 +6,28 @@
 /*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 00:37:25 by yonshin           #+#    #+#             */
-/*   Updated: 2023/02/26 01:10:38 by yonshin          ###   ########.fr       */
+/*   Updated: 2023/02/27 10:57:52 by yonshin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main (int argc, char *argv[], char *envp[])
+static void	init(int argc, char **argv, char **envp)
+{
+	(void)argc;
+	(void)argv;
+	data();
+	init_signal();
+	init_envp(envp);
+	init_rl_catch_signals();
+}
+
+int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
 	t_list	*parsed;
 
-	argc = (int)argc;
-	argv = (char **)argv;
-	ft_memset(data(), 0, sizeof(t_ms)); //이미 data()함수에서 memset으로 초기화 하고 리턴하기 때문에 초기화 해줄 필요 없음
-	init_signal();
-	data()->pwd = getcwd(NULL, 0); // 한 라인에 두개의 함수가 있어서 생기는 놈 오류로 나누어야함
-	init_envp(envp);
-	init_rl_catch_signals();
+	init(argc, argv, envp);
 	parsed = NULL;
 	while (1)
 	{
