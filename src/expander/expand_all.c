@@ -71,11 +71,14 @@ char	*expand_all(char *str)
 	while (*str)
 	{
 		len = 0;
-		while (str[len] && (quote != 0 || str[len] != '$'))
+		while (str[len] && (quote == '\'' || str[len] != '$'))
 		{
-			if (str[len] == quote)
+			if (str[len] == quote && ++len)
+			{
 				quote = 0;
-			else if (str[len] == '\'')
+				continue ;
+			}
+			if (quote == 0 && (str[len] == '\'' || str[len] == '"'))
 				quote = str[len];
 			len++;
 		}

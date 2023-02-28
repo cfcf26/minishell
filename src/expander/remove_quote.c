@@ -18,19 +18,26 @@ static char	*cpy_without_quote(char *str, int len)
 	int		size;
 	int		i;
 	char	*res;
+	char	quote;
 
+	res = ft_calloc_guard(1, ft_strlen(str) + 1);
 	i = -1;
 	size = 0;
+	quote = 0;
 	while (++i < len)
-		if (ft_strchr("'\"", str[i]) == 0)
-			size++;
-	res = ft_malloc_guard(size + 1);
-	res[size] = 0;
-	i = -1;
-	size = 0;
-	while (++i < len)
-		if (ft_strchr("'\"", str[i]) == 0)
-			res[size++] = str[i];
+	{
+		if (quote == str[i])
+		{
+			quote = 0;
+			continue ;
+		}
+		if (quote == 0 && ft_strchr("'\"", str[i]))
+		{
+			quote = str[i];
+			continue ;
+		}
+		res[size++] = str[i];
+	}
 	return (res);
 }
 
