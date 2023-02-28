@@ -20,7 +20,7 @@ int	parse(char *line, t_list **result)
 	line_to_token(line, result);
 	if (data()->parse_err)
 	{
-		ft_lstclear(result, (t_action_1)destroy_token);
+		ft_lstclear(result, (t_action_1)destroy_parsing_token);
 		return (data()->parse_err);
 	}
 	else

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntaxer.c                                         :+:      :+:    :+:   */
+/*   destroy_parsing_token.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yonshin <yonshin@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,17 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
+#include "model.h"
 
-int	syntaxer(t_list **lst)
+void	destroy_parsing_token(void *content)
 {
-	if (check_syntax_error(*lst))
-	{
-		print_err(NULL, NULL, "syntax error", 258);
-		ft_lstclear(lst, (t_action_1)destroy_parsing_token);
-		return (258);
-	}
-	if (organize_token_list_by_type(lst))
-		return (1);
-	return (0);
+	t_token	*token;
+
+	token = content;
+	free(token->ud.str);
+	free(token);
 }

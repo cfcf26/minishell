@@ -32,5 +32,6 @@ t_list	*init_pipe(t_list **lst);
 t_list	*init_redir_lst(t_list **lst);
 int		organize_token_list_by_type(t_list **lst);
 t_token	*create_token_word(char *str);
+void	destroy_parsing_token(void *content);
 
 #endif
