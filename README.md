@@ -32,3 +32,4 @@ Your program has to implement:
 - Wildcards * should work for the current working directory.
 
 The bonus part will only be assessed if the mandatory part is PERFECT. Perfect means the mandatory part has been integrally done and works without malfunctioning. If you have not passed ALL the mandatory requirements, your bonus part will not be evaluated at all.
+<img width="1073" alt="스크린샷 2024-03-29 오전 11 32 01" src="https://github.com/cfcf26/minishell/assets/75878816/416576ce-d5de-45a3-a337-e0d40c260c4f">
